@@ -6,7 +6,7 @@ Frontend to the D_D RPC Provider built with our trusted partner, [POKT Network](
 
 ## To Do's
 
-- [ ] Sidebar - <span style="color: red;">Assigned to PSkinnerTech</span>
+- [ ] Sidebar - _**Assigned to PSkinnerTech**_
 - [ ] Home Page
 - [ ] About Page
 - [ ] Contact Page
