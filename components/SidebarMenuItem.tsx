@@ -30,6 +30,7 @@ export const SideBarMenuItem = ({ item }: { item: SideNavItem }) => {
           {subMenuOpen && (
             <div className="bg-[#3a3f48] border-1-4">
               <div className="grid gap-y-2 px-10 py-3 leading-5">
+                {/* @ts-ignore */}
                 {item.subMenuItems.map((subItem, index) => {
                   return (
                     <Link
