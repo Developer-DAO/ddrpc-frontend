@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+"use client";
 import { Karla } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar";
-import Header from "@/components/Header";
+import Navbar from "@/components/Navbar";
 import PageWrapper from "@/components/PageWrapper";
+import { useState } from "react";
 
 const karla = Karla({
   weight: ["200", "300", "400", "500", "600", "700", "800"],
@@ -11,22 +12,22 @@ const karla = Karla({
   variable: "--font-karla",
 });
 
-export const metadata: Metadata = {
-  title: "D_D RPC Provider",
-  description: "Custom D_D RPC Provider",
-};
-
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const [toggleCollapse, setToggleCollapse] = useState(false);
   return (
     <html lang="en">
       <body className={karla.className}>
         <div className="flex min-h-screen">
-          <Sidebar />
-          <Header />
+          <Sidebar toggleCollapse={toggleCollapse} />
+
+          <Navbar
+            toggleCollapse={toggleCollapse}
+            setToggleCollapse={setToggleCollapse}
+          />
           <PageWrapper>{children}</PageWrapper>
         </div>
       </body>
