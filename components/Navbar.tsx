@@ -1,5 +1,6 @@
+import classNames from "classnames";
 import { Dispatch, SetStateAction } from "react";
-import { BsList } from "react-icons/bs";
+import { BsArrowBarRight, BsArrowLeft } from "react-icons/bs";
 
 export default function Navbar({
   toggleCollapse,
@@ -12,9 +13,17 @@ export default function Navbar({
     setToggleCollapse(!toggleCollapse);
   };
 
+  const navbarContainerStyle = classNames(
+    "fixed bg-[#31353d] w-full z-0 px-4 shadow-sm shadow-slate-500/40 pl-[20rem]",
+    {
+      "pl-[5rem]": toggleCollapse,
+      "pl-[20rem]": !toggleCollapse,
+    }
+  );
+
   return (
     // NAVBAR CONTAINER
-    <header className="fixed bg-[#31353d] w-full z-0 px-4 shadow-sm shadow-slate-500/40 pl-[20rem]">
+    <header className={navbarContainerStyle}>
       <div className="flex items-center justify-between h-16">
         {/* MENU BUTTON */}
 
@@ -22,7 +31,8 @@ export default function Navbar({
           onClick={sidebarToggle}
           className="bg-[#3a3f48] text-[#6e768e] hover:bg-white ml-3 p-1.5 rounded-md w-[30px] shadow-md shadow-black/10 transition duration-300 ease-in-out flex items-center justify-center"
         >
-          <BsList />
+          {toggleCollapse && <BsArrowBarRight />}
+          {!toggleCollapse && <BsArrowLeft />}
         </button>
 
         {/* PROFILE ICON */}
