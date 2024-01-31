@@ -36,10 +36,18 @@ export const SideBarMenuItem = ({
             onClick={toggleSubMenu}
           >
             {item.icon}
-            <span className="ml text-base leading-6 font-semibold">
-              {item.title}
-            </span>
-            <BsChevronRight className="ml-auto stroke-2 text-xs" />
+            {!toggleCollapse && (
+              <>
+                <span className="ml text-base leading-6 font-semibold">
+                  {item.title}
+                </span>
+                <BsChevronRight
+                  className={`${
+                    subMenuOpen ? "rotate-90" : ""
+                  } 'ml-auto stroke-2 text-xs'`}
+                />
+              </>
+            )}
           </a>
 
           {subMenuOpen && (
