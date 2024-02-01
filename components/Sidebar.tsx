@@ -1,15 +1,13 @@
+import React from "react";
 import { SIDENAV_ITEMS } from "@/types/SIDEBAR_CONSTANTS.";
 import Image from "next/image";
 import { SideBarMenuItem } from "./SidebarMenuItem";
 import classNames from "classnames";
+import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 
-interface SidebarProps {
-  toggleCollapse: boolean;
-}
-
-export default function Sidebar({ toggleCollapse }: SidebarProps) {
+export default function Sidebar() {
   // SIDEBAR COLLAPSE VARIABLE
-
+  const { toggleCollapse } = useSidebarToggle();
   const sidebarContainerStyle = classNames(
     "fixed bg-[#31353d] text-gray-500 z-50 h-full shadow-lg shadow-gray-900/20 transition duration-300 ease-in-out w-[20rem]",
     {
