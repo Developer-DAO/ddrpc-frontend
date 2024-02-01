@@ -4,7 +4,6 @@ import "./globals.css";
 import Sidebar from "@/components/Sidebar";
 import Navbar from "@/components/Navbar";
 import PageWrapper from "@/components/PageWrapper";
-import { useState } from "react";
 
 const karla = Karla({
   weight: ["200", "300", "400", "500", "600", "700", "800"],
@@ -17,18 +16,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [toggleCollapse, setToggleCollapse] = useState(false);
   return (
     <html lang="en">
       <body className={karla.className}>
         <div className="flex min-h-screen">
-          <Sidebar toggleCollapse={toggleCollapse} />
+          <Sidebar />
 
-          <Navbar
-            toggleCollapse={toggleCollapse}
-            setToggleCollapse={setToggleCollapse}
-          />
-          <PageWrapper toggleCollapse={toggleCollapse}>{children}</PageWrapper>
+          <Navbar />
+          <PageWrapper children={children}></PageWrapper>
         </div>
       </body>
     </html>

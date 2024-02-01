@@ -1,16 +1,11 @@
 import classNames from "classnames";
-import { Dispatch, SetStateAction } from "react";
 import { BsArrowBarRight, BsArrowLeft } from "react-icons/bs";
+import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 
-export default function Navbar({
-  toggleCollapse,
-  setToggleCollapse,
-}: {
-  toggleCollapse: boolean;
-  setToggleCollapse: Dispatch<SetStateAction<boolean>>;
-}) {
+export default function Navbar() {
+  const { toggleCollapse, invokeToggleCollapse } = useSidebarToggle();
   const sidebarToggle = () => {
-    setToggleCollapse(!toggleCollapse);
+    invokeToggleCollapse();
   };
 
   const navbarContainerStyle = classNames(
