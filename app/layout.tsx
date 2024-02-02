@@ -1,15 +1,13 @@
-"use client";
-import { Karla } from "next/font/google";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
-import Sidebar from "@/components/Sidebar";
-import Navbar from "@/components/Navbar";
-import PageWrapper from "@/components/PageWrapper";
 
-const karla = Karla({
-  weight: ["200", "300", "400", "500", "600", "700", "800"],
-  subsets: ["latin"],
-  variable: "--font-karla",
-});
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: "D_D RPC",
+  description: "D_D RPC is a dashboard for managing your decentralized RPCs.",
+};
 
 export default function RootLayout({
   children,
@@ -18,14 +16,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={karla.className}>
-        <div className="flex min-h-screen">
-          <Sidebar />
-
-          <Navbar />
-          <PageWrapper children={children}></PageWrapper>
-        </div>
-      </body>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }
