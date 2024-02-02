@@ -9,7 +9,7 @@ Frontend to the D_D RPC Provider built with our trusted partner, [POKT Network](
 - [x] Sidebar - _**Assigned to PSkinnerTech**_
 - [x] Navbar - _**Assigned to PSkinnerTech**_
 - [ ] Dashboard - _**Assigned to PSkinnerTech**_
-- [ ] Home Page
+- [ ] Home Page - _**Assigned to Vorcigernix**_
 - [ ] About Page
 - [ ] Contact Page
 - [ ] Login / Login / Registration
