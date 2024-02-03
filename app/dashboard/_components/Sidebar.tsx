@@ -10,7 +10,7 @@ export default function Sidebar() {
   // SIDEBAR COLLAPSE VARIABLE
   const { toggleCollapse } = useSidebarToggle();
   const sidebarContainerStyle = classNames(
-    "sidebar overflow-y-auto overflow-x-auto fixed bg-[#31353d] text-gray-500 z-50 h-full shadow-lg shadow-gray-900/20 transition duration-300 ease-in-out w-[20rem]",
+    "overflow-y-auto overflow-x-auto fixed bg-[#31353d] text-gray-500 z-50 h-full shadow-lg shadow-gray-900/20 transition duration-300 ease-in-out w-[20rem]",
     {
       ["sm:w-[5rem] sm:left-0 left-[-100%]"]: toggleCollapse,
       ["w-[20rem]"]: !toggleCollapse,
