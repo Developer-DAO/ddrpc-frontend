@@ -18,7 +18,7 @@
 
 @layer utilities {
   .text-balance {
-    text-wrap: balance;
+    white-space: normal;
   }
 }
 
@@ -27,7 +27,7 @@ body {
 
 .sidebar {
   scrollbar-width: thin;
-  scrollbar-colo: #999999 transparent;
+  scrollbar-color: #999999 transparent;
 }
 
 .sidebar:: -webkit-scrollbar {
