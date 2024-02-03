@@ -1,14 +1,15 @@
+import { Footer } from "@/components/footer";
+import { Navigation } from "@/components/navigation";
 import React from "react";
 
 export default function HomePage() {
   return (
-    <>
-      <div>D_D RPC Home Page</div>
-      <div>
-        <button className="rounded-md p-3 bg-gray-800 text-white m-3">
-          <a href="/dashboard">Go to Dashboard</a>
-        </button>
-      </div>
-    </>
+    <div className="relative flex min-h-screen flex-col bg-background">
+      <Navigation />
+      <main className="flex-1">
+        MAIN SITE CONTENT
+      </main>
+      <Footer />
+    </div>
   );
 }

@@ -17,15 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={karla.className}>
         <div className="flex min-h-screen">
           <Sidebar />
 
           <Navbar />
           <PageWrapper children={children}></PageWrapper>
         </div>
-      </body>
-    </html>
   );
 }
