@@ -21,7 +21,7 @@
     white-space: normal;
   }
 }
-/*
+
 .sidebar {
   scrollbar-width: thin;
   scrollbar-color: #999999 transparent;
@@ -33,4 +33,4 @@
 .sidebar::-webkit-scrollbar-thumb {
   background: #999999;
   border-radius: 10px;
-} */
+}
