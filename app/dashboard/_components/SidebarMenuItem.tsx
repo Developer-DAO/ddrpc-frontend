@@ -1,18 +1,15 @@
 "use client";
 
+import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { SideNavItem } from "@/types/types";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { BsChevronRight } from "react-icons/bs";
 
-export const SideBarMenuItem = ({
-  item,
-  toggleCollapse,
-}: {
-  item: SideNavItem;
-  toggleCollapse: boolean;
-}) => {
+export const SideBarMenuItem = ({ item }: { item: SideNavItem }) => {
+  const { toggleCollapse } = useSidebarToggle();
+
   const linkStyle =
     "flex items-center min-h-[40px] h-full text-[#6e768e] py-2 px-4 hover:text-white rounded-md transition duration-200 ease-in-out";
   const ddLinkStyle = linkStyle;
