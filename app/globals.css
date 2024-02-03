@@ -21,3 +21,21 @@
     text-wrap: balance;
   }
 }
+
+body {
+}
+
+.sidebar {
+  scrollbar-width: thin;
+  scrollbar-colo: #999999 transparent;
+}
+
+.sidebar:: -webkit-scrollbar {
+  background: transparent;
+  width: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #999999;
+  border-radius: 10px;
+}
