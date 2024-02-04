@@ -1,3 +1,4 @@
+"use client";
 import { ReactNode } from "react";
 import classNames from "classnames";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
