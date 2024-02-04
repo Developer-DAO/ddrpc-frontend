@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    background: url('../public/starsBg.svg') repeat-x center center fixed;
+}
