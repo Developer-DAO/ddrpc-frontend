@@ -46,7 +46,7 @@ export default function AuthenticationPage() {
                 Create an account
               </h1>
               <p className="text-sm text-neutral-400">
-                Enter your email below to create your account
+                Connect wallet and enter your email below to create your account
               </p>
             </div>
             <UserAuthForm />
