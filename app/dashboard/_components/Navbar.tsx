@@ -1,4 +1,4 @@
-import classNames from "classnames";
+import { cn } from "@/lib/utils";
 import { BsArrowBarRight, BsArrowLeft } from "react-icons/bs";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import Link from "next/link";
@@ -9,7 +9,7 @@ export default function Navbar() {
     invokeToggleCollapse();
   };
 
-  const navbarContainerStyle = classNames(
+  const navbarContainerStyle = cn(
     "fixed bg-[#31353d] w-full z-0 px-4 shadow-sm shadow-slate-500/40",
     {
       ["pl-[5.6rem] sm:pl-[20rem]"]: !toggleCollapse,
