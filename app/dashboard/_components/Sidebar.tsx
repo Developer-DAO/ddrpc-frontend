@@ -1,15 +1,16 @@
 import React from "react";
 import { SIDENAV_ITEMS } from "@/types/SIDEBAR_CONSTANTS.";
+import classNames from "classnames";
 import Image from "next/image";
 import { SideBarMenuItem } from "./SidebarMenuItem";
-import classNames from "classnames";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
+import SidebarMenuGroup from "./SidebarMenuGroup";
 
 export default function Sidebar() {
   // SIDEBAR COLLAPSE VARIABLE
   const { toggleCollapse } = useSidebarToggle();
   const sidebarContainerStyle = classNames(
-    "fixed bg-[#31353d] text-neutral-500 z-50 h-full shadow-lg shadow-gray-900/20 transition duration-300 ease-in-out w-[20rem]",
+    "overflow-y-auto overflow-x-auto fixed bg-[#31353d] text-gray-500 z-50 h-full shadow-lg shadow-gray-900/20 transition duration-300 ease-in-out w-[20rem]",
     {
       ["sm:w-[5rem] sm:left-0 left-[-100%]"]: toggleCollapse,
       ["w-[20rem]"]: !toggleCollapse,
@@ -47,13 +48,7 @@ export default function Sidebar() {
       <nav className="flex flex-col gap-2 transition duration-300 pt-5">
         <div className="flex flex-col gap-2 px-4">
           {SIDENAV_ITEMS.map((item, index) => {
-            return (
-              <SideBarMenuItem
-                key={index}
-                item={item}
-                toggleCollapse={toggleCollapse}
-              ></SideBarMenuItem>
-            );
+            return <SidebarMenuGroup key={index} menuGroup={item} />;
           })}
         </div>
       </nav>
