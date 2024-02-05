@@ -1,6 +1,7 @@
 import classNames from "classnames";
 import { BsArrowBarRight, BsArrowLeft } from "react-icons/bs";
 import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
+import Link from "next/link";
 
 export default function Navbar() {
   const { toggleCollapse, invokeToggleCollapse } = useSidebarToggle();
@@ -29,6 +30,14 @@ export default function Navbar() {
           {toggleCollapse && <BsArrowBarRight />}
           {!toggleCollapse && <BsArrowLeft />}
         </button>
+
+        {/* ADMIN BUTTON */}
+
+        <Link href="/dashboard/admin" passHref>
+          <button className="bg-[#3a3f48] text-[#6e768e] hover:bg-white ml-3 p-1.5 rounded-md w-[60px] shadow-md shadow-black/10 transition duration-300 ease-in-out flex items-center justify-center">
+            Admin
+          </button>
+        </Link>
 
         {/* PROFILE ICON */}
 
