@@ -2,12 +2,12 @@ import { useSidebarToggle } from "@/hooks/use-sidebar-toggle";
 import { SideNavItemGroup } from "@/types/types";
 import React from "react";
 import { SideBarMenuItem } from "./SidebarMenuItem";
-import classNames from "classnames";
+import { cn } from "@/lib/utils";
 
 const SidebarMenuGroup = ({ menuGroup }: { menuGroup: SideNavItemGroup }) => {
   const { toggleCollapse } = useSidebarToggle();
 
-  const menuGroupTitleStyle = classNames(
+  const menuGroupTitleStyle = cn(
     "py-4 tracking-[].1rem font-medium uppercase text-sm text-[#A5A1AA]",
     {
       "text-center": toggleCollapse,
