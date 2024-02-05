@@ -24,6 +24,23 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
+            <Button variant="outline" type="button" disabled={isLoading}>
+        {isLoading ? (
+          <Icons.spinner className="mr-2 h-6 w-6 animate-spin p-2" />
+        ) : (
+          <Icons.ethereum className="mr-2 h-6 w-6 p-2" />
+        )}{" "}
+        Wallet
+      </Button>
+
+      <div className="relative">
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-neutral-500">
+            And continue with
+          </span>
+        </div>
+      </div>
+
       <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
@@ -48,22 +65,8 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </Button>
         </div>
       </form>
-      <div className="relative">
+   
 
-        <div className="relative flex justify-center text-xs uppercase">
-          <span className="bg-background px-2 text-neutral-500">
-            Or continue with
-          </span>
-        </div>
-      </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "}
-        GitHub
-      </Button>
     </div>
   )
 }

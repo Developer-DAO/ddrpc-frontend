@@ -9,6 +9,16 @@ export const Icons = {
       <path d="M205.36 242.024H159.28V225H205.36V242.024Z" fill="black" />
     </svg>
   ),
+  ethereum: (props: IconProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+    ><path fill="currentColor" fill-rule="evenodd" d="M12 1.25C6.063 1.25 1.25 6.063 1.25 12S6.063 22.75 12 22.75S22.75 17.937 22.75 12S17.937 1.25 12 1.25m.61 3.314a.75.75 0 0 0-1.22 0l-5 7a.75.75 0 0 0 0 .872l5 7a.75.75 0 0 0 1.22 0l5-7a.75.75 0 0 0 0-.872zM12 17.71l-3.287-4.603l3.14.628c.097.02.197.02.294 0l3.14-.628zm.75-5.625l2.966-.593L12.75 7.34zm-1.5 0V7.34l-2.966 4.152z" clip-rule="evenodd" />
+    </svg>
+  ),
+
   twitter: (props: IconProps) => (
     <svg
       {...props}
