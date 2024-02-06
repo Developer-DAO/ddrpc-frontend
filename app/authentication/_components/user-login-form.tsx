@@ -24,11 +24,11 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-            <Button variant="outline" type="button" disabled={isLoading}>
+            <Button variant="outline" type="button" disabled={isLoading} className="p-2">
         {isLoading ? (
-          <Icons.spinner className="mr-2 h-6 w-6 animate-spin p-2" />
+          <Icons.spinner className="mr-2 h-6 w-6 animate-spin" />
         ) : (
-          <Icons.ethereum className="mr-2 h-6 w-6 p-2" />
+          <Icons.ethereum className="mr-2 h-6 w-6" />
         )}{" "}
         Wallet
       </Button>
@@ -36,7 +36,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
       <div className="relative">
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-neutral-500">
-            And continue with
+            Or continue with
           </span>
         </div>
       </div>
@@ -57,7 +57,21 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
               disabled={isLoading}
             />
           </div>
-          <Button disabled={isLoading}>
+          <div className="grid gap-1">
+            <Label className="sr-only" htmlFor="password">
+              Password
+            </Label>
+            <Input
+              id="password"
+              placeholder="******"
+              type="password"
+              autoCapitalize="none"
+              autoComplete="email"
+              autoCorrect="off"
+              disabled={isLoading}
+            />
+          </div>
+          <Button disabled={isLoading} className="mt-2">
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}

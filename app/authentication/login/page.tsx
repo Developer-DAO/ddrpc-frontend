@@ -3,7 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-import { UserAuthForm } from "@/app/authentication/_components/user-reg-form";
+import { UserAuthForm } from "@/app/authentication/_components/user-login-form";
 import { Icons } from "@/components/ui/icons"
 
 export const metadata: Metadata = {
@@ -35,7 +35,7 @@ export default function AuthenticationPage() {
                 &ldquo;Developer DAO RPC has saved me countless hours of work and
                 improved resilience of my project.&rdquo;
               </p>
-              <footer className="text-sm">Adam Sobotka</footer>
+              <footer className="text-sm">Patrick Skinner</footer>
             </blockquote>
           </div>
         </div>
@@ -43,10 +43,10 @@ export default function AuthenticationPage() {
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2 text-center">
               <h1 className="text-2xl font-semibold tracking-tight">
-                Create an account
+                Login to your account
               </h1>
               <p className="text-sm text-neutral-400">
-                Connect wallet and enter your email below to create your account
+                Connect wallet or enter your email and password below to log in.
               </p>
             </div>
             <UserAuthForm />
