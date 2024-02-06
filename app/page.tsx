@@ -14,20 +14,18 @@ export default function HomePage() {
               <div className="w-full lg:max-w-lg lg:w-1/2 rounded-xl">
                 <div>
                   <div className="relative w-full max-w-lg">
-                                        <div className="relative">
-                      <img className="object-cover object-center mx-auto rounded-lg shadow-2xl" alt="hero" src="https://images.unsplash.com/photo-1666816943169-688a639b06d8?q=80&w=2232&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+                    <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-500 rounded-full opacity-70  filter blur-xl animate-blob"></div>
+                    <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-500 rounded-full opacity-70  filter blur-xl animate-blob animation-delay-2000"></div>
+                    <div className="absolute -bottom-8 left-28 w-72 h-72 bg-blue-500 rounded-full opacity-70  filter blur-xl animate-blob animation-delay-4000"></div>
+                    <div className="relative">
+                      <img className="object-cover object-center mx-auto mix-blend-color-dodge" alt="hero" src="eth-diamond-purple.svg" />
                     </div>
-                    
-{/*                     <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full opacity-70 mix-blend-multiply filter blur-xl animate-blob"></div>
-                    <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full opacity-70 mix-blend-multiply filter blur-xl animate-blob animation-delay-2000"></div>
-                    <div className="absolute -bottom-8 left-28 w-72 h-72 bg-pink-300 rounded-full opacity-70 mix-blend-multiply filter blur-xl animate-blob animation-delay-4000"></div>  
- */}
                   </div>
                 </div>
               </div>
               <div className="flex flex-col items-start mt-12 mb-16 text-left lg:flex-grow lg:w-1/2 lg:pl-6 xl:pl-24 md:mb-0 xl:mt-0">
                 <span className="mb-8 text-xs font-bold tracking-widest text-neutral-600 uppercase"> remote procedure call gateway by D_D </span>
-                <h1 className="mb-8 text-4xl font-bold leading-none tracking-tighter text-neutral-600 md:text-7xl lg:text-5xl">Your gateway to the decentrlaized world.</h1>
+                <h1 className="mb-8 text-4xl font-bold leading-none tracking-tighter text-neutral-100 md:text-7xl lg:text-5xl">Your gateway to the decentrlaized world.</h1>
                 <p className="mb-8 text-base leading-relaxed text-left text-neutral-500">Some other claim why we are building this,  other claim why we are building this. Perfecto! </p>
                 <p className="mb-2 text-base leading-relaxed text-left text-neutral-500">Don't miss the opportunity, register now!</p>
                 <div className="flex-col mt-0 lg:mt-6 max-w-7xl sm:flex">
