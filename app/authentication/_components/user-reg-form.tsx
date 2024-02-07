@@ -1,17 +1,22 @@
 "use client"
 
 import * as React from "react"
-
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/ui/icons"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+
+  const account = useAccount()
+  const { connectors, connect, status, error } = useConnect()
+  const { disconnect } = useDisconnect()
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault()
@@ -22,17 +27,28 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }, 3000)
   }
 
+  const loginButtons = connectors.map((connector) => (
+    <Button variant="outline" type="button" disabled={isLoading} className="p-2"
+      key={connector.uid}
+      onClick={() => connect({ connector })}
+    >
+      {isLoading ? (
+        <Icons.spinner className="mr-2 h-6 w-6 animate-spin" />
+      ) : (
+        <Icons.ethereum className="mr-2 h-6 w-6" />
+      )}{" "}
+      {connector.name}
+    </Button>
+  ))
+
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-            <Button variant="outline" type="button" disabled={isLoading} className="p-2">
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-6 w-6 animate-spin" />
-        ) : (
-          <Icons.ethereum className="mr-2 h-6 w-6" />
-        )}{" "}
-        Wallet
-      </Button>
 
+      {account.status === 'connected' ? (<div> {JSON.stringify(account.addresses)}</div>) : (
+        <div className="grid gap-1">
+          {loginButtons}
+        </div>
+      )}
       <div className="relative">
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-neutral-500">
@@ -65,7 +81,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </Button>
         </div>
       </form>
-   
+
 
     </div>
   )

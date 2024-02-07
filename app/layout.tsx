@@ -1,10 +1,14 @@
 import { Metadata } from "next"
+import { headers } from 'next/headers'
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme";
 import { Navigation } from "@/components/navigation"
 import { cn } from "@/lib/utils";
 import { Footer } from "@/components/footer";
+import { config } from '../wagmi.config'
+import { cookieToInitialState } from 'wagmi'
+import { Providers } from './providers'
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -64,6 +68,7 @@ interface RootLayoutProps {
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
+  const initialState = cookieToInitialState(config, headers().get('cookie'));
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
@@ -79,9 +84,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         enableSystem
         disableTransitionOnChange
       >
-          <div>
-            {children}
-          </div>
+          <Providers initialState={initialState}><div>{children}</div></Providers>
         </ThemeProvider></body>
 
     </html>
