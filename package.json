@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next build && next start",
     "lint": "next lint"
   },
   "dependencies": {
@@ -31,6 +31,7 @@
     "zustand": "^4.5.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.41.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
