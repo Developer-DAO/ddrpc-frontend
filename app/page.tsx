@@ -23,9 +23,9 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col items-start mt-12 mb-16 text-left lg:flex-grow lg:w-1/2 lg:pl-6 xl:pl-24 md:mb-0 xl:mt-0">
+              <div className="flex flex-col items-start mt-12 mb-16 text-left lg:flex-grow lg:w-1/2 lg:pl-6 xl:pl-24 md:mb-0 xl:mt-0" data-testid="mainhero">
                 <span className="mb-8 text-xs font-bold tracking-widest text-neutral-600 uppercase"> remote procedure call gateway by D_D </span>
-                <h1 className="mb-8 text-4xl font-bold leading-none tracking-tighter text-neutral-100 md:text-7xl lg:text-5xl">Your gateway to the decentrlaized world.</h1>
+                <h1 className="mb-8 text-4xl font-bold leading-none tracking-tighter text-neutral-100 md:text-7xl lg:text-5xl">Your gateway to the decentralized world.</h1>
                 <p className="mb-8 text-base leading-relaxed text-left text-neutral-500">Some other claim why we are building this,  other claim why we are building this. Perfecto! </p>
                 <p className="mb-2 text-base leading-relaxed text-left text-neutral-500">Don't miss the opportunity, register now!</p>
                 <div className="flex-col mt-0 lg:mt-6 max-w-7xl sm:flex">
