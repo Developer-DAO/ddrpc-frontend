@@ -29,13 +29,13 @@ export default function HomePage() {
                 <p className="mb-8 text-base leading-relaxed text-left text-neutral-500">Some other claim why we are building this,  other claim why we are building this. Perfecto! </p>
                 <p className="mb-2 text-base leading-relaxed text-left text-neutral-500">Don't miss the opportunity, register now!</p>
                 <div className="flex-col mt-0 lg:mt-6 max-w-7xl sm:flex">
-                  <form method="post" id="ddrpc-form" name="ddrpc-form" target="_blank" className="p-2 mt-8 transition duration-500 ease-in-out transform border2 bg-gray-50 rounded-xl sm:max-w-lg sm:flex">
+                  <form method="post" id="ddrpc-form" name="ddrpc-form" target="_blank" className="p-2 mt-8 transition duration-500 ease-in-out transform border2 bg-neutral-50 rounded-xl sm:max-w-lg sm:flex">
                     <div className="flex-1 min-w-0 ddrpc-form-group">
                       <label htmlFor="member_email" className="sr-only">Email address</label>
-                      <input id="member_email" type="email" className="block w-full px-5 py-3 text-base placeholder-gray-300 dark:placeholder-gray-500 transition duration-500 ease-in-out transform bg-transparent border border-transparent rounded-md text-neutral-600 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300" placeholder="Enter your email  " />
+                      <input id="member_email" type="email" className="block w-full px-5 py-3 text-base placeholder-neutral-300 dark:placeholder-neutral-500 transition duration-500 ease-in-out transform bg-transparent border border-transparent rounded-md text-neutral-600 focus:outline-none focus:border-transparent focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-300" placeholder="Enter your email  " />
                     </div>
                     <div className="mt-4 sm:mt-0 sm:ml-3 ddrpc-form-actions">
-                      <button type="submit" value="Subscribe" name="member[subscribe]" id="member_submit" className="block w-full px-5 py-3 text-base font-medium text-white bg-gray-600 border border-transparent rounded-full shadow hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-300 sm:px-10">Notify me</button>
+                      <button type="submit" value="Subscribe" name="member[subscribe]" id="member_submit" className="block w-full px-5 py-3 text-base font-medium text-white bg-neutral-600 border border-transparent rounded-full shadow hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-300 sm:px-10">Notify me</button>
                     </div>
                   </form>
                   <div className="sm:max-w-lg sm:flex">
