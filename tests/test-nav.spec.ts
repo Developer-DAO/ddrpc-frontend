@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
  
 test('should navigate across pages', async ({ page }) => {
 
-  await page.goto('http://localhost:3000/');
+  await page.goto('/');
 
   await page.getByTestId('nav-home').click();
   await expect(page.getByTestId('mainhero')).toBeVisible();
