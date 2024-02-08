@@ -1,10 +1,14 @@
 import { Metadata } from "next"
+import dynamic from 'next/dynamic'
 import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-import { UserAuthForm } from "@/app/authentication/_components/user-reg-form";
 import { Icons } from "@/components/ui/icons"
+
+//import { UserAuthForm } from "@/app/authentication/_components/user-reg-form";
+
+const UserAuthForm = dynamic(() => import('@/app/authentication/_components/user-reg-form'), { ssr: false })
 
 export const metadata: Metadata = {
   title: "Authentication",

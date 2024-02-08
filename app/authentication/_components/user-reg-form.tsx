@@ -7,11 +7,12 @@ import { Icons } from "@/components/ui/icons"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export default function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   const account = useAccount()
@@ -28,23 +29,41 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   }
 
   const loginButtons = connectors.map((connector) => (
-    <Button variant="outline" type="button" disabled={isLoading} className="p-2"
-      key={connector.uid}
-      onClick={() => connect({ connector })}
-    >
-      {isLoading ? (
-        <Icons.spinner className="mr-2 h-6 w-6 animate-spin" />
-      ) : (
-        <Icons.ethereum className="mr-2 h-6 w-6" />
-      )}{" "}
-      {connector.name}
-    </Button>
+    //console.log(connector),
+    connector.name.toLowerCase() === "injected" ? null :
+      <Button variant="outline" type="button" disabled={isLoading} className="p-2"
+        key={connector.uid}
+        onClick={() => connect({ connector })}
+      >
+        {isLoading ? (
+          <Icons.spinner className="mr-2 h-6 w-6 animate-spin" />
+        ) : (
+          <img src={connector.icon} className="mr-2 h-6 w-6" />
+        )}{" "}
+        {connector.name}
+      </Button>
   ))
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
 
-      {account.status === 'connected' ? (<div> {JSON.stringify(account.addresses)}</div>) : (
+      {account.status === 'connected' ? (
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <Button variant="destructive" onClick={() => disconnect()}>Disconnect</Button>
+          </HoverCardTrigger>
+          <HoverCardContent className="w-80">
+            <div className="flex justify-between space-x-4">
+              <div className="space-y-1">
+                <h4 className="text-sm font-semibold">connected as</h4>
+                <div className="text-xs">
+                  {JSON.stringify(account.addresses[0].replaceAll(account.addresses[0].slice(8, 36), '...'))}
+                </div>
+              </div>
+            </div>
+          </HoverCardContent>
+        </HoverCard>
+      ) : (
         <div className="grid gap-1">
           {loginButtons}
         </div>
