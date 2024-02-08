@@ -16,10 +16,10 @@ export default function AuthenticationPage() {
     <>
       <div className="container relative hidden h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
-          href="/authentication/login"
+          href="/authentication"
           className="absolute right-4 top-4 md:right-8 md:top-8 flex items-center justify-center gap-1 rounded-full border-2 transition-all h-12 px-6 text-lg text-black border-white bg-white font-paragraph font-semibold tracking-wider hover:drop-shadow-[10px_0_20px_rgba(254,254,254,0.472)]"
         >
-          Login
+          Register
         </Link>
         <div className="relative hidden h-screen flex-col bg-muted p-10 text-white lg:flex dark:border-r">
           <div className="absolute inset-0" style={{ backgroundImage: "url(https://academy.developerdao.com/_next/image?url=%2Fschoolofcode.png&w=640&q=75)", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "50%" }} />
