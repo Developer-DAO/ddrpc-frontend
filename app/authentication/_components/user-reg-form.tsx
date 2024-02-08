@@ -13,7 +13,7 @@ import { LoginButton } from "@/components/wallet-buttons"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
-export default function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export default function UserRegForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
 
   const account = useAccount()
@@ -90,11 +90,25 @@ export default function UserAuthForm({ className, ...props }: UserAuthFormProps)
               disabled={isLoading}
             />
           </div>
+          <div className="grid gap-1">
+            <Label className="sr-only" htmlFor="password">
+              Password
+            </Label>
+            <Input
+              id="password"
+              placeholder="******"
+              type="password"
+              autoCapitalize="none"
+              autoComplete="email"
+              autoCorrect="off"
+              disabled={isLoading}
+            />
+          </div>
           <Button disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign In with Email
+            Sign Up
           </Button>
         </div>
       </form>
