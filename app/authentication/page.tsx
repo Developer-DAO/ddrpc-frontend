@@ -8,7 +8,7 @@ import { Icons } from "@/components/ui/icons"
 
 //import { UserAuthForm } from "@/app/authentication/_components/user-reg-form";
 
-const UserAuthForm = dynamic(() => import('@/app/authentication/_components/user-reg-form'), { ssr: false })
+const UserRegForm = dynamic(() => import('@/app/authentication/_components/user-reg-form'), { ssr: false })
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -53,7 +53,7 @@ export default function AuthenticationPage() {
                 Connect wallet and enter your email below to create your account
               </p>
             </div>
-            <UserAuthForm />
+            <UserRegForm />
             <p className="px-8 text-center text-sm text-neutral-400">
               By clicking continue, you agree to our{" "}
               <Link

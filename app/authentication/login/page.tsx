@@ -3,8 +3,10 @@ import Image from "next/image"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
-import { UserAuthForm } from "@/app/authentication/_components/user-login-form";
 import { Icons } from "@/components/ui/icons"
+import dynamic from "next/dynamic"
+
+const UserLoginForm = dynamic(() => import('@/app/authentication/_components/user-login-form'), { ssr: false })
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -49,7 +51,7 @@ export default function AuthenticationPage() {
                 Connect wallet or enter your email and password below to log in.
               </p>
             </div>
-            <UserAuthForm />
+            <UserLoginForm />
             <p className="px-8 text-center text-sm text-neutral-400">
               By clicking continue, you agree to our{" "}
               <Link
