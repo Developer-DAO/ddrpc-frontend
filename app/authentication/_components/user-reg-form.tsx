@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
+import { LoginButton } from "@/components/wallet-buttons"
 
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
@@ -28,21 +29,18 @@ export default function UserAuthForm({ className, ...props }: UserAuthFormProps)
     }, 3000)
   }
 
-  const loginButtons = connectors.map((connector) => (
-    //console.log(connector),
-    connector.name.toLowerCase() === "injected" ? null :
-      <Button variant="outline" type="button" disabled={isLoading} className="p-2"
+
+
+  const loginButtons = connectors.map((connector) =>
+    connector.name.toLowerCase() === "injected" ? null : (
+      <LoginButton
+        connector={connector}
+        isLoading={isLoading}
+        connect={connect}
         key={connector.uid}
-        onClick={() => connect({ connector })}
-      >
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-6 w-6 animate-spin" />
-        ) : (
-          <img src={connector.icon} className="mr-2 h-6 w-6" />
-        )}{" "}
-        {connector.name}
-      </Button>
-  ))
+      />
+    )
+  );
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
