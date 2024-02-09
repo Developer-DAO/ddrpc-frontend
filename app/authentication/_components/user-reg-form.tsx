@@ -23,15 +23,6 @@ export default function UserRegForm({ className, ...props }: UserAuthFormProps) 
   const { connectors, connect, status, error } = useConnect()
   const { disconnect } = useDisconnect()
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault()
-    setIsLoading(true)
-
-    setTimeout(() => {
-      setIsLoading(false)
-    }, 3000)
-  }
-
 
 
   const walletButtons = connectors.map((connector) =>
