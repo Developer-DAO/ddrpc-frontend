@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
-import { LoginButton } from "@/components/wallet-buttons"
+import { WalletButton } from "@/components/wallet-buttons"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
@@ -30,7 +30,7 @@ export default function UserLoginForm({ className, ...props }: UserAuthFormProps
 
   const loginButtons = connectors.map((connector) =>
     connector.name.toLowerCase() === "injected" ? null : (
-      <LoginButton
+      <WalletButton
         connector={connector}
         isLoading={isLoading}
         connect={connect}

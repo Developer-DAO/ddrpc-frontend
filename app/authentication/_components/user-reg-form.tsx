@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useFormStatus } from "react-dom";
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/ui/icons"
@@ -8,7 +9,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
-import { LoginButton } from "@/components/wallet-buttons"
+import { WalletButton } from "@/components/wallet-buttons"
+import { SubmitButton } from "@/components/form-submit-button";
+import { registerUser } from "../authbfe";
 
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
@@ -31,9 +34,9 @@ export default function UserRegForm({ className, ...props }: UserAuthFormProps) 
 
 
 
-  const loginButtons = connectors.map((connector) =>
+  const walletButtons = connectors.map((connector) =>
     connector.name.toLowerCase() === "injected" ? null : (
-      <LoginButton
+      <WalletButton
         connector={connector}
         isLoading={isLoading}
         connect={connect}
@@ -41,6 +44,7 @@ export default function UserRegForm({ className, ...props }: UserAuthFormProps) 
       />
     )
   );
+
 
   return (
     <div className={cn("grid gap-6", className)} {...props}>
@@ -63,7 +67,7 @@ export default function UserRegForm({ className, ...props }: UserAuthFormProps) 
         </HoverCard>
       ) : (
         <div className="grid gap-1">
-          {loginButtons}
+          {walletButtons}
         </div>
       )}
       <div className="relative">
@@ -74,7 +78,8 @@ export default function UserRegForm({ className, ...props }: UserAuthFormProps) 
         </div>
       </div>
 
-      <form onSubmit={onSubmit}>
+      <form action={registerUser}>
+        <input type="hidden" name="wallet" id="wallet" value={account.addresses?.[0]} />
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -82,6 +87,7 @@ export default function UserRegForm({ className, ...props }: UserAuthFormProps) 
             </Label>
             <Input
               id="email"
+              name="email"
               placeholder="name@example.com"
               type="email"
               autoCapitalize="none"
@@ -96,6 +102,7 @@ export default function UserRegForm({ className, ...props }: UserAuthFormProps) 
             </Label>
             <Input
               id="password"
+              name="password"
               placeholder="******"
               type="password"
               autoCapitalize="none"
@@ -104,12 +111,7 @@ export default function UserRegForm({ className, ...props }: UserAuthFormProps) 
               disabled={isLoading}
             />
           </div>
-          <Button disabled={isLoading}>
-            {isLoading && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Sign Up
-          </Button>
+          <SubmitButton />
         </div>
       </form>
 

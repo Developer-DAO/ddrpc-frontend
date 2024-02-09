@@ -1,13 +1,13 @@
 import { Button } from "./ui/button";
 import { Icons } from "./ui/icons";
 
-export interface LoginButtonProps {
+export interface WalletButtonProps {
   connector: any;
   isLoading: boolean;
   connect: (params: any) => void;
 }
 
-export const LoginButton: React.FC<LoginButtonProps> = ({ connector, isLoading, connect }) => {
+export const WalletButton: React.FC<WalletButtonProps> = ({ connector, isLoading, connect }) => {
   return (
     <Button
       variant="outline"
