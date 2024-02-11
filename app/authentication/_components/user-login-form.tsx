@@ -1,17 +1,23 @@
 "use client"
 
 import * as React from "react"
-
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { cn } from "@/lib/utils"
 import { Icons } from "@/components/ui/icons"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
+import { WalletButton } from "@/components/wallet-buttons"
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export default function UserLoginForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
+
+  const account = useAccount()
+  const { connectors, connect, status, error } = useConnect()
+  const { disconnect } = useDisconnect()
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault()
@@ -22,17 +28,41 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }, 3000)
   }
 
+  const loginButtons = connectors.map((connector) =>
+    connector.name.toLowerCase() === "injected" ? null : (
+      <WalletButton
+        connector={connector}
+        isLoading={isLoading}
+        connect={connect}
+        key={connector.uid}
+      />
+    )
+  );
+
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-            <Button variant="outline" type="button" disabled={isLoading} className="p-2">
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-6 w-6 animate-spin" />
-        ) : (
-          <Icons.ethereum className="mr-2 h-6 w-6" />
-        )}{" "}
-        Wallet
-      </Button>
 
+      {account.status === 'connected' ? (
+        <HoverCard>
+          <HoverCardTrigger asChild>
+            <Button variant="destructive" onClick={() => disconnect()}>Disconnect</Button>
+          </HoverCardTrigger>
+          <HoverCardContent className="w-80">
+            <div className="flex justify-between space-x-4">
+              <div className="space-y-1">
+                <h4 className="text-sm font-semibold">connected as</h4>
+                <div className="text-xs">
+                  {JSON.stringify(account.addresses[0].replaceAll(account.addresses[0].slice(8, 36), '...'))}
+                </div>
+              </div>
+            </div>
+          </HoverCardContent>
+        </HoverCard>
+      ) : (
+        <div className="grid gap-1">
+          {loginButtons}
+        </div>
+      )}
       <div className="relative">
         <div className="relative flex justify-center text-xs uppercase">
           <span className="bg-background px-2 text-neutral-500">
@@ -79,7 +109,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
           </Button>
         </div>
       </form>
-   
+
 
     </div>
   )
