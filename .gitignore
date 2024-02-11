@@ -36,5 +36,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+
 # lockfiles
 yarn.lock
+
+# tests
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
