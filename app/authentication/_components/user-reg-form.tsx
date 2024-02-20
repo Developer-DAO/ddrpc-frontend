@@ -8,9 +8,9 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
 import { WalletButton } from "@/components/wallet-buttons"
-import { SubmitButton } from "@/components/form-submit-button";
 import { registerUser } from "../authbfe";
-import { useFormState, useFormStatus } from "react-dom";
+import { useFormState } from "react-dom";
+import { SubmitButton } from "@/components/form-submit-button"
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
@@ -98,7 +98,7 @@ export default function UserRegForm({ className, ...props }: UserAuthFormProps) 
                   autoCorrect="off"
                 />
               </div>
-              <SubmitButton />
+              <SubmitButton text="Register" />
             </div>
           </form>
         </div>
@@ -120,7 +120,7 @@ export default function UserRegForm({ className, ...props }: UserAuthFormProps) 
                       <a href="/authentication/login" className="items-center justify-center w-full px-6 py-2.5 text-center text-white duration-200 bg-black border-2 border-black rounded-full inline-flex hover:bg-transparent hover:border-black hover:text-black focus:outline-none lg:w-auto focus-visible:outline-black text-sm focus-visible:ring-black">
                         Login &nbsp; →
                       </a>
-                      <a href="/contact" className="inline-flex items-center justify-center text-sm font-semibold text-black duration-200 hover:text-blue-500 focus:outline-none focus-visible:outline-gray-600">
+                      <a href="/contact" className="inline-flex items-center justify-center text-sm font-semibold text-black duration-200 hover:text-neutral-500 focus:outline-none focus-visible:outline-gray-600">
                         Contact us &nbsp; →
                       </a>
                     </div>
@@ -139,14 +139,14 @@ export default function UserRegForm({ className, ...props }: UserAuthFormProps) 
                       This is an Error
                     </p>
                       <p className="max-w-xl mt-4 text-base tracking-tight text-neutral-600">
-                        We failed to register you. Are you already registered? Please contact us if the problem persists.
+                        We failed to register you. Error is: {state.message} Please contact us if the problem persists.
                       </p>
                     </div>
                     <div className="flex flex-col items-center justify-center gap-3 mt-10 lg:flex-row lg:justify-start">
                       <a href="/authentication/reset" className="items-center justify-center w-full px-6 py-2.5 text-center text-white duration-200 bg-black border-2 border-black rounded-full inline-flex hover:bg-transparent hover:border-black hover:text-black focus:outline-none lg:w-auto focus-visible:outline-black text-sm focus-visible:ring-black">
                         Reset password &nbsp; →
                       </a>
-                      <a href="/contact" className="inline-flex items-center justify-center text-sm font-semibold text-black duration-200 hover:text-blue-500 focus:outline-none focus-visible:outline-gray-600">
+                      <a href="/contact" className="inline-flex items-center justify-center text-sm font-semibold text-black duration-200 hover:text-neutral-500 focus:outline-none focus-visible:outline-gray-600">
                         Contact us &nbsp; →
                       </a>
                     </div>
