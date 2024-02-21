@@ -1,21 +1,15 @@
 import { Metadata } from "next"
-import dynamic from 'next/dynamic'
-import Image from "next/image"
 import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
 import { Icons } from "@/components/ui/icons"
+import UserRegForm from "@/app/authentication/_components/user-reg-form"
 
-//import { UserAuthForm } from "@/app/authentication/_components/user-reg-form";
-
-const UserRegForm = dynamic(() => import('@/app/authentication/_components/user-reg-form'), { ssr: false })
 
 export const metadata: Metadata = {
-  title: "Authentication",
-  description: "Login or register into D_D RPC.",
+  title: "Registration",
+  description: "Register into D_D RPC.",
 }
 
-export default function AuthenticationPage() {
+export default function RegistrationPage() {
   return (
     <>
       <div className="container relative hidden h-[800px] flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -26,7 +20,7 @@ export default function AuthenticationPage() {
           Login
         </Link>
         <div className="relative hidden h-screen flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-          <div className="absolute inset-0" style={{ backgroundImage: "url(https://academy.developerdao.com/_next/image?url=%2Fschoolofcode.png&w=640&q=75)", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "50%" }} />
+          <div className="absolute inset-0" style={{ backgroundImage: "url(https://images.unsplash.com/photo-1599089245397-ba66755081f4?q=80&w=2236&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "50%" }} />
           <Link href="/" className="relative z-20 flex items-center text-lg font-medium">
             <Icons.logo className="h-12 w-12 mr-2" />
             <span className="hidden font-bold sm:inline-block">
@@ -49,12 +43,12 @@ export default function AuthenticationPage() {
               <h1 className="text-2xl font-semibold tracking-tight">
                 Create an account
               </h1>
-              <p className="text-sm text-neutral-400">
+              <p className="text-sm text-neutral-500">
                 Connect wallet and enter your email below to create your account
               </p>
             </div>
             <UserRegForm />
-            <p className="px-8 text-center text-sm text-neutral-400">
+            <p className="px-8 text-center text-sm text-neutral-500">
               By clicking continue, you agree to our{" "}
               <Link
                 href="/terms"
