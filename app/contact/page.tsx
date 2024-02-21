@@ -15,7 +15,7 @@ export default function HomePage() {
                                 <div className="flex flex-col">
                                     <div>
                                         <h2 className="text-4xl text-white">Let's get started!</h2>
-                                        <p className="mt-2 text-sm text-neutral-400">
+                                        <p className="mt-2 text-sm text-neutral-500">
                                             Complete the details below so I can process your request and then
                                             schedule a time to discuss your goals.
                                         </p>
@@ -27,19 +27,19 @@ export default function HomePage() {
                                             <label className="block mb-3 text-sm font-medium text-neutral-300" id="name">
                                                 First name
                                             </label>
-                                            <input className="block w-full px-6 py-3 text-black bg-white border border-neutral-200 appearance-none rounded-xl placeholder:text-neutral-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm" placeholder="Your name" />
+                                            <input className="block w-full px-6 py-3 text-black bg-white border border-neutral-200 appearance-none rounded-xl placeholder:text-neutral-500 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm" placeholder="Your name" />
                                         </div>
                                         <div className="col-span-full">
                                             <label className="block mb-3 text-sm font-medium text-neutral-300" id="company">
                                                 What is the name of your company / organisation?
                                             </label>
-                                            <input className="block w-full px-6 py-3 text-black bg-white border border-neutral-200 appearance-none rounded-xl placeholder:text-neutral-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm" placeholder="Company name" />
+                                            <input className="block w-full px-6 py-3 text-black bg-white border border-neutral-200 appearance-none rounded-xl placeholder:text-neutral-500 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm" placeholder="Company name" />
                                         </div>
                                         <div className="col-span-full">
                                             <label className="block mb-3 text-sm font-medium text-neutral-300" id="email">
                                                 How shall we contact you?
                                             </label>
-                                            <input className="block w-full px-6 py-3 text-black bg-white border border-neutral-200 appearance-none rounded-xl placeholder:text-neutral-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm" placeholder="email@example.com" type="email" />
+                                            <input className="block w-full px-6 py-3 text-black bg-white border border-neutral-200 appearance-none rounded-xl placeholder:text-neutral-500 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm" placeholder="email@example.com" type="email" />
                                         </div>
                                         <div>
                                             <div>
@@ -47,7 +47,7 @@ export default function HomePage() {
                                                     Project details
                                                 </label>
                                                 <div className="mt-1">
-                                                    <textarea className="block w-full px-6 py-3 text-black bg-white border border-neutral-200 appearance-none rounded-xl placeholder:text-neutral-400 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm" placeholder="What are you working on?" rows={4}></textarea>
+                                                    <textarea className="block w-full px-6 py-3 text-black bg-white border border-neutral-200 appearance-none rounded-xl placeholder:text-neutral-500 focus:border-blue-500 focus:outline-none focus:ring-blue-500 sm:text-sm" placeholder="What are you working on?" rows={4}></textarea>
                                                 </div>
                                             </div>
                                         </div>

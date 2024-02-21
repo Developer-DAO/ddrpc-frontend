@@ -1,65 +1,27 @@
 "use client"
-
-import * as React from "react"
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card"
-import { WalletButton } from "@/components/wallet-buttons"
-import { registerUser } from "../authbfe";
+import { registerUser } from "../register";
+import Wallet from "./wallet";
+import { useAccount } from "wagmi";
 import { useFormState } from "react-dom";
-import { SubmitButton } from "@/components/form-submit-button"
-
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> { }
 
 
-export default function UserRegForm({ className, ...props }: UserAuthFormProps) {
 
-  const account = useAccount()
-  const { connectors, connect, status, error } = useConnect()
-  const { disconnect } = useDisconnect()
-
-  const [state, formAction] = useFormState(registerUser, null);
-
-  const walletButtons = connectors.map((connector) =>
-    connector.name.toLowerCase() === "injected" ? null : (
-      <WalletButton
-        connector={connector}
-        isLoading={status === 'pending'}
-        connect={connect}
-        key={connector.uid}
-      />
-    )
-  );
-
+export default function UserRegForm() {
+  const account = useAccount();
+  const initialState = {
+    message: '',
+    success: false
+  }
+  const [state, formAction] = useFormState(registerUser, initialState)
   return (
     <>
-      {!state ? (
-        <div className={cn("grid gap-6", className)} {...props}>
-          {account.status === 'connected' ? (
-            <HoverCard>
-              <HoverCardTrigger asChild>
-                <Button variant="destructive" onClick={() => disconnect()}>Disconnect</Button>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80">
-                <div className="flex justify-between space-x-4">
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-semibold">connected as</h4>
-                    <div className="text-xs">
-                      {JSON.stringify(account.addresses[0].replaceAll(account.addresses[0].slice(8, 36), '...'))}
-                    </div>
-                  </div>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
-          ) : (
-            <div className="grid gap-1">
-              {walletButtons}
-            </div>
-          )}
+      {state.message==='' ? (
+        <div className="grid gap-6">
           <div className="relative">
+            <Wallet />
             <div className="relative flex justify-center text-xs uppercase">
               <span className="bg-background px-2 text-neutral-500">
                 And continue with
@@ -98,12 +60,12 @@ export default function UserRegForm({ className, ...props }: UserAuthFormProps) 
                   autoCorrect="off"
                 />
               </div>
-              <SubmitButton text="Register" />
+              <Button type="submit">Register</Button>
             </div>
           </form>
         </div>
       ) : (<>
-        {state.success ? (<>
+        {state && (state as { success: boolean }).success ? (<>
           <div className="relative items-center w-full py-12 mx-auto max-w-7xl">
             <div className="flex w-full mx-auto">
               <div className="relative inline-flex items-center m-auto align-middle">
