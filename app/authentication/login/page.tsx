@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default async function AuthenticationPage() {
   const session = await getSession();
   return (
-      <main className="flex-1">
+      <main className="flex-1" data-testid="loginpage">
         <section>
           {!session ? (
             <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">

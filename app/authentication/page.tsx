@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function RegistrationPage() {
   return (
 
-    <main className="flex-1">
+    <main className="flex-1" data-testid="registerpage">
       <section>
         <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 md:px-12 lg:px-24 lg:py-24">
           <div className="justify-center mx-auto text-left align-bottom transition-all transform bg-white/5 rounded-lg sm:align-middle sm:max-w-3xl sm:w-full">
