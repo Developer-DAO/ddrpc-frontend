@@ -8,7 +8,7 @@ export async function Navigation() {
     <header className="sticky top-0 z-50 w-full  bg-zinc-900/95 backdrop-blur supports-[backdrop-filter]:bg-zinc-900/60">
       <div className="container flex py-4 max-w-screen-2xl items-center">
         <div className="mr-4 hidden md:flex">
-          <Link href="/" className="mr-6 flex items-center space-x-2" data-testid="nav-home">
+          <Link href="/" className="mr-6 flex items-center space-x-2" data-testid="nav-auth-home">
             <Icons.logo className="h-12 w-12" />
             <span className="hidden font-bold sm:inline-block text-white">
               RPC
