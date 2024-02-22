@@ -1,5 +1,5 @@
 "use server"
-export async function registerUser(prevState: any, formData: FormData) {
+export async function registerUser(prevState: any,formData: FormData) {
 
   const rawFormData = {
     email: formData.get('email'),
@@ -7,7 +7,9 @@ export async function registerUser(prevState: any, formData: FormData) {
     password: formData.get('password'),
   }
 
-  //console.log(rawFormData);
+  if (!rawFormData.email || !rawFormData.wallet || !rawFormData.password) {
+    return { message: 'Please fill out all fields', success: false };
+  }
 
   const response = await fetch('http://0.0.0.0:3000/api/register', {
     method: 'POST',
@@ -17,11 +19,12 @@ export async function registerUser(prevState: any, formData: FormData) {
     body: JSON.stringify(rawFormData),
   })
   const result = await response;
+  const responsetext = (await result.text());
+  console.log(responsetext, result.status);
   if (result.status === 200) {
     return { message: `Registered user  ${rawFormData.email}`, success: true };
   }
   else {
-
-    return { message: `Error: ${result.statusText}`, success: false };
+    return { message: `Error: ${responsetext}`, success: false };
   }
 }

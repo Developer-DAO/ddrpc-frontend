@@ -2,7 +2,7 @@ import { useFormStatus } from "react-dom"
 import { Button } from "./ui/button"
 import { Icons } from "./ui/icons"
 
-export function SubmitButton() {
+export const SubmitButton = ({ text }: { text: string }) => {
     const { pending } = useFormStatus()
 
     return (
@@ -10,7 +10,7 @@ export function SubmitButton() {
             {pending && (
                 <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Sign Up
+            {text}
         </Button>
     )
 }
