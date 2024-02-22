@@ -22,8 +22,8 @@ export default function UserRegForm() {
         <div className="grid gap-6">
           <div className="relative">
             <Wallet />
-            <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-neutral-500">
+            <div className="relative flex justify-start text-xs uppercase">
+              <span className=" px-2 text-neutral-500">
                 And continue with
               </span>
             </div>

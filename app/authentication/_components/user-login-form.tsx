@@ -12,12 +12,12 @@ export default function UserRegForm() {
   return (
     <>
       <div className="grid gap-6">
-        <div className="flex justify-center">
+        <div className="flex justify-start">
           <Link href="/authentication/walletlogin" className="flex w-fit items-center justify-center gap-1 rounded-full border-2 transition-all h-12 px-6 text-lg text-black border-white bg-white font-paragraph font-semibold tracking-wider hover:drop-shadow-[10px_0_20px_rgba(254,254,254,0.472)]">Wallet Login</Link>
         </div>
         <div className="relative">
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-neutral-500">
+          <div className="relative flex justify-start text-xs uppercase">
+            <span className=" px-2 text-neutral-500">
               Or continue with
             </span>
           </div>
