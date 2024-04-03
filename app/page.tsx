@@ -1,4 +1,3 @@
-import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Navigation } from "@/components/navigation";
 
 export default function Example() {
