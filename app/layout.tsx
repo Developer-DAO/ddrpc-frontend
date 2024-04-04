@@ -31,25 +31,25 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: "https://rpc.developerdao.com",
-    title: "Developer DAO RPC | Access Blockchain Data, Fund Public Goods",
+    title: "Developer DAO RPC | Access Blockchain Data. Fund Public Goods",
     description:
       "High-performance and censorship-resistant access to Blockchain data from the first DAO-owned RPC Gateway.",
     siteName: "Developer DAO RPC",
     images: [
       {
-        url: "https://rpc.developerdao.com/og-image.png",
+        url: "og-image.png",
         width: 1200,
         height: 630,
-        alt: "Developer DAO RPC Gateway. Access Blockchain Data, Fund Public Goods",
+        alt: "Developer DAO RPC Gateway. Access Blockchain Data. Fund Public Goods",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Developer DAO RPC | Access Blockchain Data, Fund Public Goods",
+    title: "Developer DAO RPC | Access Blockchain Data. Fund Public Goods",
     description:
       "High-performance and censorship-resistant access to Blockchain data from the first DAO-owned RPC Gateway.",
-    images: "https://rpc.developerdao.com/og-image.png",
+    images: "og-image.png",
   },
   icons: {
     icon: "/favicon.ico",

@@ -1,6 +1,17 @@
 import { Navigation } from "@/components/navigation";
+import client from "@sendgrid/client";
+
+// client.setApiKey('process.env')
 
 export default function Example() {
+  // async function addSubscriber(formdata) {
+  //   "use server";
+
+  //   const rawFormData = {
+  //     email: formdata.get("email"),
+  //   };
+  // }
+
   return (
     <div>
       <header className="absolute inset-x-0 top-0 z-50">
@@ -50,7 +61,7 @@ export default function Example() {
 
               <div>
                 <a
-                  href="#"
+                  href="https://developerdao.notion.site/Become-an-RPC-Partner-f6d3ffdc3c414bbcbc1f2ca8aea4f61f?pvs=4"
                   className="text-sm font-semibold leading-6 text-white"
                 >
                   Become a launch partner <span aria-hidden="true">→</span>
@@ -62,8 +73,8 @@ export default function Example() {
       </div>
       {/* Logo cloud */}
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <h2 className="text-center text-lg font-semibold leading-8 text-white">
-          Support for over 60 chains including
+        <h2 className="text-center text-lg leading-8 text-white">
+          Built on POKT Network. Access 60+ chains with unbeatable uptime
         </h2>
         <div className="mx-auto mt-10 grid max-w-lg grid-cols-4 items-center gap-x-8 gap-y-10 sm:max-w-xl sm:grid-cols-6 sm:gap-x-10 lg:mx-0 lg:max-w-none lg:grid-cols-5">
           <img
