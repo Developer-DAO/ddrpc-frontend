@@ -1,46 +1,48 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { Navigation } from "@/components/navigation";
-const sendgrid = require("@sendgrid/client");
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+// const sendgrid = require("@sendgrid/client");
+// sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 export default function Example() {
-  async function submitForm(formData: FormData) {
-    "use server";
+  // I think this needs to be a server action rather than embedded into the page
 
-    const email = formData.get("email");
+  // async function submitForm(formData: FormData) {
+  //   "use server";
 
-    const listId =
-      process.env.NODE_END === "production"
-        ? process.env.SENDGRID_LIVE_LIST_ID
-        : process.env.SENDGRID_TEST_LIST_ID;
+  //   const email = formData.get("email");
 
-    const data = {
-      list_ids: [listId],
-      contacts: [
-        {
-          email: email,
-        },
-      ],
-    };
+  //   const listId =
+  //     process.env.NODE_END === "production"
+  //       ? process.env.SENDGRID_LIVE_LIST_ID
+  //       : process.env.SENDGRID_TEST_LIST_ID;
 
-    const request = {
-      url: `/v3/marketing/contacts`,
-      method: "PUT",
-      body: data,
-    };
+  //   const data = {
+  //     list_ids: [listId],
+  //     contacts: [
+  //       {
+  //         email: email,
+  //       },
+  //     ],
+  //   };
 
-    sendgrid
-      .request(request)
-      // @ts-ignore
-      .then(([response, body]) => {
-        console.log(response.statusCode);
-        console.log(response.body);
-      })
-      // @ts-ignore
-      .catch((error) => {
-        console.error(error);
-      });
-  }
+  //   const request = {
+  //     url: `/v3/marketing/contacts`,
+  //     method: "PUT",
+  //     body: data,
+  //   };
+
+  //   sendgrid
+  //     .request(request)
+  //     // @ts-ignore
+  //     .then(([response, body]) => {
+  //       console.log(response.statusCode);
+  //       console.log(response.body);
+  //     })
+  //     // @ts-ignore
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }
 
   return (
     <div>
@@ -67,7 +69,23 @@ export default function Example() {
               High-performance and censorship-resistant access to Blockchain
               data from the first DAO-owned RPC Gateway.
             </p>
-            <div className="mt-10 flex-col space-y-8 px-4">
+            <div className="mt-10 flex items-center justify-center gap-x-6">
+              <a
+                href="https://devdao.to/rpc-waitlist"
+                target="_blank"
+                className="flex-none rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-black shadow-sm hover:bg-gray-400focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+              >
+                Join Waitlist
+              </a>
+              <a
+                href="mailto:partnerships@developerdao.com?cc=operations@developerdao.com&subject=Become%20an%20RPC%20launch%20partners%20and%20engage%201000s%20of%20builders"
+                className="text-sm font-semibold leading-6 text-white"
+                target="_blank"
+              >
+                Become a launch partner <span aria-hidden="true">→</span>
+              </a>
+            </div>
+            {/* <div className="mt-10 flex-col space-y-8 px-4">
               <form
                 action={submitForm}
                 className="mt-6 flex max-w-md gap-x-4 mx-auto"
@@ -100,7 +118,7 @@ export default function Example() {
                   Become a launch partner <span aria-hidden="true">→</span>
                 </a>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
