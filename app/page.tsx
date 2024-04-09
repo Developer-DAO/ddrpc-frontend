@@ -69,7 +69,7 @@ export default function Example() {
               High-performance and censorship-resistant access to Blockchain
               data from the first DAO-owned RPC Gateway.
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
+            <div className="mt-16 flex items-center justify-center gap-x-6">
               <a
                 href="https://devdao.to/rpc-waitlist"
                 target="_blank"
@@ -166,7 +166,7 @@ export default function Example() {
         </div>
       </div>
       <footer>
-        <div className="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
+        <div className="mx-auto max-w-7xl px-6 mt-12 md:flex md:items-center md:justify-between lg:px-8">
           <div className="flex justify-center space-x-6 md:order-2">
             {/* {navigation.map((item) => (
               <a
