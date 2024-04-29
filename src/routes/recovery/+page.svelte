@@ -1,25 +1,42 @@
 <script lang="ts">
-	import { authorized } from '$lib/stores';
 	import { AxiosError, type AxiosResponse } from 'axios';
 	import axios from 'axios';
+	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 
-	let recoveryRequest: RecoveryRequest = { email: undefined };
+	let recoveryRequest: RecoveryRequest = { email: '' };
 	let stepOne: boolean = false;
-	let recoveryCode: string | undefined = undefined;
+	let updatePassReq: UpdatePassword = { code: '', email: '', password: '' };
+	const toast = getToastStore();
+
+	const getActivationToast = (email: string): ToastSettings => {
+		return {
+			message: `An email with your reset code was sent to ${email}.`,
+			background: 'variant-filled'
+		};
+	};
+
+	$: {
+		updatePassReq.email = recoveryRequest.email;
+	}
+
+	type UpdatePassword = {
+		code: string;
+		email: string;
+		password: string;
+	};
 
 	type RecoveryRequest = {
-		email?: string;
+		email: string;
 	};
 
 	const requestRecovery = async (req: RecoveryRequest): Promise<void> => {
+		console.log('recovery request sent...');
 		await axios
 			.get(`http://localhost:3000/api/recovery/${req.email}`)
 			.then((res: AxiosResponse) => {
 				if (res.status === 200) {
-					authorized.update(() => {
-						return true;
-					});
 					stepOne = true;
+					toast.trigger(getActivationToast(recoveryRequest.email));
 				}
 			})
 			.catch((e: AxiosError) => {
@@ -27,40 +44,28 @@
 			});
 	};
 
-	type UpdatePassword = {
-		code?: string;
-		email?: string;
-	};
-
 	const updatePassword = async (req: UpdatePassword): Promise<void> => {
-		if (req.code?.length === 8) {
-			await axios
-				.post('http://localhost:3000/api/recovery', { req })
-				.then((res: AxiosResponse) => {
-					if (res.status === 200) {
-						authorized.update(() => {
-							return true;
-						});
-						location.href = '/login';
-					}
-				})
-				.catch((e: AxiosError) => {
-					console.error(e);
-				});
-		}
+		console.log('attempting to update password ...');
+		console.log(req);
+		await axios
+			.post('http://localhost:3000/api/recovery', {
+				code: req.code,
+				email: req.email,
+				password: req.password
+			})
+			.then((res: AxiosResponse) => {
+				if (res.status === 200) {
+					location.href = '/login';
+				}
+			})
+			.catch((e: AxiosError) => {
+				console.error(e);
+			});
 	};
-
-	$: updatePassword({ code: recoveryCode, email: recoveryRequest.email });
 </script>
 
 <div class="flex mx-auto h-screen justify-center items-center align-middle">
-	<form
-		name="login"
-		on:submit={() => {
-			requestRecovery(recoveryRequest);
-		}}
-		class="h-1/2 w-1/2 flex flex-col"
-	>
+	<container name="login" class="h-1/2 w-1/2 flex flex-col">
 		<header class="font-bold text-xl self-center">Recover Account</header>
 		<hr class="!border-t-8 mt-5" />
 		<section class="mt-5 space-y-2">
@@ -77,25 +82,38 @@
 							required
 							autocomplete="email"
 						/>
+						<div class="flex flex-row justify-end space-x-2">
+							<button type="submit" class="btn variant-filled mt-5"> Recover Password </button>
+						</div>
 					</form>
-					<div class="flex flex-row justify-end space-x-2">
-						<button type="submit" class="btn variant-filled mt-5"> Recover Password </button>
-					</div>
 				</label>
 			{:else}
 				<label class="label">
-					<span>Email</span>
-					<input
-						id="email"
-						bind:value={recoveryCode}
-						class="input"
-						type="text"
-						placeholder="Input"
-						required
-						autocomplete="email"
-					/>
+					<span>Code</span>
+					<form class="flex flex-col gap-4" on:submit={() => updatePassword(updatePassReq)}>
+						<input
+							id="code"
+							bind:value={updatePassReq.code}
+							class="input"
+							type="text"
+							placeholder="Input"
+							required
+						/>
+						<span>New Password</span>
+						<input
+							id="password"
+							bind:value={updatePassReq.password}
+							class="input"
+							type="text"
+							placeholder="Input"
+							required
+						/>
+						<div class="flex flex-row justify-end space-x-2">
+							<button type="submit" class="btn variant-filled mt-5"> Complete </button>
+						</div>
+					</form>
 				</label>
 			{/if}
 		</section>
-	</form>
+	</container>
 </div>
