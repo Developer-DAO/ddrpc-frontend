@@ -4,6 +4,8 @@
 	import { onMount } from 'svelte';
 	import { apiKeys, authorized, type Keys } from '$lib/stores';
 	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
+	import Sidebar from '../../components/sidebar.svelte'
+
 	const modalStore = getModalStore();
 	const newKey = async (): Promise<void> => {
 		await axios('http://localhost:3000/api/keys', { withCredentials: true, method: 'post' })
@@ -78,7 +80,45 @@
 	});
 </script>
 
-<div class="h-screen flex flex-col justify-center items-center">
+<div class="container mx-auto flex gap-10">
+	<Sidebar />
+	<div class="w-full">
+		<div class="flex justify-between items-center">
+			<h1 class="header-3 my-0">API Keys</h1>
+			<button class="button-primary" on:click={() => newKey()}>
+				Create New
+			</button>
+		</div>
+		<div class="overflow-x-auto relative shadow-md rounded-lg border border-blue-800 mt-5">
+			<table class="w-full text-sm text-left text-gray-500 border-collapse rounded-lg overflow-hidden">
+				<thead class="text-xs text-gray-700 uppercase">
+					<tr>
+						<th scope="col" class="p-5 border-b border-blue-800">ID</th>
+						<th scope="col" class="p-5 border-b border-blue-800">API Key</th>
+						<th scope="col" class="p-5 border-b border-blue-800">Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{#each $apiKeys as row, i}
+						<tr class="">
+							<td class="p-5">{i}</td>
+							<td class="p-5">{row.apikey}</td>
+							<td class="p-5">
+								<button 
+									class="text-red-600 font-bold"
+									on:click={() => onConfirm(row.apikey)}>Delete
+								</button>
+							</td>
+						</tr>
+					{/each}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+<!-- <div class="h-screen flex flex-col justify-center items-center">
 	{#if $authorized}
 		<div class="flex table-container w-2/3">
 			<table class="table table-hover">
@@ -120,4 +160,4 @@
 		<p>or</p>
 		<a href="/register" class="btn variant-ghost mt-5">Register</a>
 	{/if}
-</div>
+</div> -->

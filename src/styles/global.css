@@ -1,0 +1,138 @@
+:root {
+	--background: #070018;
+	--description: #968aa0;
+}
+
+html {
+	@apply bg-background
+}
+
+body * {
+	font-family: "Be Vietnam Pro", sans-serif;
+	color: white;
+}
+
+
+/* Buttons */
+.button-primary {
+	@apply flex gap-3 w-fit px-5 py-3 bg-blue-600 rounded-lg text-sm items-center;
+
+	box-shadow: rgba(16, 24, 40, 0.05) 0px 1px 2px 0px, 
+            	rgba(0, 0, 0, 0.25) 0px -2px 0px 0px inset, 
+            	rgba(255, 255, 255, 0.13) 0px 1px 0px 0px inset;
+	transition: all 0.2s ease;
+}
+.button-primary:hover {
+	@apply hover:bg-blue-700;
+	box-shadow: none
+}
+
+.button-link {
+	@apply flex gap-3 w-fit px-5 py-3 bg-[#251E36] rounded-lg text-sm items-center;
+
+	box-shadow: rgba(16, 24, 40, 0.05) 0px 1px 2px 0px, 
+            	rgba(0, 0, 0, 0.25) 0px -2px 0px 0px inset, 
+            	rgba(255, 255, 255, 0.13) 0px 1px 0px 0px inset;
+	transition: all 0.2s ease;
+}
+.button-link-active {
+	@apply flex gap-3 w-fit px-5 py-3 bg-blue-600 rounded-lg text-sm items-center;
+
+	box-shadow: rgba(16, 24, 40, 0.05) 0px 1px 2px 0px, 
+            	rgba(0, 0, 0, 0.25) 0px -2px 0px 0px inset, 
+            	rgba(255, 255, 255, 0.13) 0px 1px 0px 0px inset;
+}
+.button-link:hover, .button-link-active:hover {
+	@apply hover:bg-blue-700;
+	box-shadow: none
+}
+
+.button-transparent {
+	@apply flex gap-3 w-fit px-5 py-3 bg-transparent rounded-lg text-sm items-center;
+}
+
+.button-outline {
+	@apply flex gap-3 w-fit px-5 py-3 rounded-lg text-sm border border-blue-800 hover:border-blue-600 items-center;	
+	transition: all 0.2s ease;
+}
+/* End Buttons */
+
+/* Inputs */
+.input {
+	@apply bg-transparent px-5 py-3 border-[#4b4f5b] focus:border-blue-600 rounded-lg !important;
+}
+/* End Inputs */
+
+
+/* Text */
+.header-1 {
+	@apply my-5 text-7xl font-medium;
+}
+
+.header-2 {
+	@apply my-5 text-5xl font-medium;
+}
+
+.header-3 {
+	@apply my-3 text-2xl font-medium;
+}
+
+.description {
+	@apply my-2 text-description;
+}
+.description-light {
+	@apply my-2 text-indigo-900;
+}
+/* End Texts */
+
+.label {
+	@apply flex gap-1 bg-blue-950 text-blue-200 font-medium text-xs px-2 py-1 rounded-md shadow-md;
+
+	font-family: "IBM Plex Mono", monospace;
+	text-transform: uppercase;
+}
+.label-light {
+	@apply flex gap-1 bg-blue-200 text-blue-600 font-medium text-xs px-2 py-1 rounded-md shadow-md;
+
+	font-family: "IBM Plex Mono", monospace;
+	text-transform: uppercase;
+}
+.label-light:before, .label:before {
+	content: "•";
+	font-size: 14px;
+}
+
+.gradient-background {
+  position: relative;
+  left: calc(0% + 3rem);
+  width: 36.125rem;
+  transform: translateX(-100%) translateY(-80%) scale(1.2);
+  height: 36.125rem;
+  background-image: linear-gradient(to bottom right, #2a27ac, #3e3af2);
+  opacity: 0.3;
+  clip-path: polygon(74% 44.1%, 99.9% 61.6%, 97.4% 26.9%, 85.4% 0.1%, 80.6% 2%, 72.4% 32.5%, 97.4% 74.87%, 27.05% 96.87%, 89% 14.45%, 47.3% 38.12%, 43.22% 13.63%, 7.12% 66.77%, 23.49% 8.79%, 36.29% 93.75%, 0% 64.9%, 17.8% 100%, 5.43% 19.43%, 76% 97.7%, 65.5% 49.7%);
+}
+
+.divider {
+	@apply container mx-auto;
+}
+
+.divider:before {
+  position: relative;
+  float: left;
+  background: linear-gradient(to right, #c8c8c800, #4b4f5b 50%);
+  margin-top: 2px;
+  width: 50%;
+  height: 0.5px;
+  content:"";
+}
+
+.divider:after {
+  position: relative;
+  float: right;
+  background: linear-gradient(to left, #c8c8c800, #4b4f5b 50%);
+  margin-top: 2px;
+  width: 50%;
+  height: 0.5px;
+  content:"";  
+}

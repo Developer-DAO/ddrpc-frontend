@@ -4,11 +4,13 @@
 	import axios from 'axios';
 	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
 
-	let ep: LoginRequest = { email: undefined, password: undefined };
+	let loginFields: LoginRequest = { email: '', password: '' };
+
 	const toast = getToastStore();
+
 	type LoginRequest = {
-		email?: string;
-		password?: string;
+		email: string;
+		password: string;
 	};
 
 	const toastSettings: ToastSettings = {
@@ -21,8 +23,8 @@
 			.post(
 				'http://localhost:3000/api/login',
 				{
-					email: login?.email,
-					password: login?.password
+					email: login.email,
+					password: login.password
 				},
 				{
 					withCredentials: true
@@ -33,7 +35,7 @@
 					authorized.update(() => {
 						return true;
 					});
-					location.href = './dashboard';
+					location.href = '/dashboard';
 				} else {
 					toast.trigger(toastSettings);
 				}
@@ -45,44 +47,48 @@
 	};
 </script>
 
-<div class="flex mx-auto h-screen justify-center items-center align-middle">
+<div class="container mx-auto px-5">
 	<form
+		class="max-w-xl mx-auto"
 		name="login"
 		on:submit={() => {
-			tryLogin(ep);
+			tryLogin(loginFields);
 		}}
-		class="h-1/2 w-1/2 flex flex-col"
 	>
-		<header class="font-bold text-xl self-center">Login</header>
-		<hr class="!border-t-8 mt-5" />
-		<section class="mt-5 space-y-2">
-			<label class="label">
-				<span>Email</span>
+		<h1 class="font-bold text-xl self-center">Login</h1>
+		<div class="mt-5 space-y-2">
+			<div class="flex flex-col">
+				<label for="email">Email</label>
 				<input
 					id="email"
-					bind:value={ep.email}
+					bind:value={loginFields.email}
 					class="input"
 					type="text"
-					placeholder="Input"
+					placeholder="vitalik@developerdao.com"
 					required
 					autocomplete="email"
 				/>
-			</label>
-			<label class="label">
-				<span>Password</span>
+			</div>
+			<div class="flex flex-col">
+				<label for="password">Password</label>
 				<input
 					id="password"
-					bind:value={ep.password}
+					bind:value={loginFields.password}
 					class="input"
 					type="password"
-					placeholder="Input"
+					placeholder="Enter your password"
 					required
 				/>
-			</label>
-		</section>
-		<div class="flex flex-row justify-end space-x-2">
-			<a href="/recovery" class="btn variant-ghost mt-5"> Forgot Password </a>
-			<button type="submit" class="btn variant-filled mt-5"> Sign-In </button>
+			</div>
 		</div>
+		
+		<div class="flex flex-row justify-between space-x-2">
+			<a href="/recovery" class="button-outline mt-5"> Forgot Password </a>
+			<button type="submit" class="button-primary mt-5"> Sign-In </button>
+		</div>
+		<div class="mt-3">
+			You don't have an account? <a href="/register" class="underline">Register Here</a>
+		</div>
+
 	</form>
 </div>
