@@ -1,0 +1,1281 @@
+diff --git a/src/app.html b/src/app.html
+index e98981e..941ef3d 100644
+--- a/src/app.html
++++ b/src/app.html
+@@ -7,6 +7,6 @@
+ 		%sveltekit.head%
+ 	</head>
+ 	<body data-sveltekit-preload-data="hover" data-theme="wintry">
+-		<div style="display: contents" class="h-full overflow-hidden">%sveltekit.body%</div>
++		<div style="display: contents">%sveltekit.body%</div>
+ 	</body>
+ </html>
+diff --git a/src/app.postcss b/src/app.postcss
+index 8ef7d35..4e43574 100644
+--- a/src/app.postcss
++++ b/src/app.postcss
+@@ -1,9 +1,6 @@
++@import "./styles/global.css";
++
+ @tailwind base;
+ @tailwind components;
+ @tailwind utilities;
+ @tailwind variants;
+-
+-html,
+-body {
+-	@apply h-full overflow-hidden;
+-}
+diff --git a/src/components/navbar.svelte b/src/components/navbar.svelte
+new file mode 100644
+index 0000000..40ce973
+--- /dev/null
++++ b/src/components/navbar.svelte
+@@ -0,0 +1,43 @@
++<script lang="ts">
++  import { authorized } from '$lib/stores';
++
++  function logout() {
++    authorized.update(() => false);
++    document.cookie = 'jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/api;';
++    window.location.href = "/";
++  }
++</script>
++
++<nav>
++  <div class="container mx-auto py-5 flex justify-between items-center">
++    <a class="text-xl uppercase w-[100px]" href={$authorized ? '/dashboard' : '/'}>D_D RPC</a>
++    <div class="flex items-center gap-10">
++      {#if $authorized}
++        <a class="text-sm" href="/dashboard" rel="noreferrer">
++        </a>
++      {:else}
++        <a class="text-sm" href="/pricing" rel="noreferrer">
++          Features
++        </a>
++        <a class="text-sm" href="/pricing" rel="noreferrer">
++          Cool Stuff
++        </a>
++        <a class="text-sm" href="/pricing" rel="noreferrer">
++          Pricing
++        </a>
++      {/if}
++    </div>
++    <div class="w-[100px]">
++      {#if $authorized}
++        <button class="text-sm button-outline ml-auto" on:click={() => logout()}>
++          Log out
++        </button>
++      {:else}
++        <a class="text-sm button-outline ml-auto" href="/login" rel="noreferrer">
++          Login
++        </a>
++      {/if}
++    </div>
++  </div>
++  <div class="divider"></div>
++</nav>
+diff --git a/src/components/sidebar.svelte b/src/components/sidebar.svelte
+new file mode 100644
+index 0000000..a9af942
+--- /dev/null
++++ b/src/components/sidebar.svelte
+@@ -0,0 +1,25 @@
++<script lang="ts">
++  import { onMount } from 'svelte';
++
++  const links = [
++    { url: '/dashboard', text: 'API Keys' },
++    { url: '/billing', text: 'Billing' }
++  ];
++
++  let currentPath = '';
++
++  onMount(() => {
++    currentPath = window.location.pathname;
++  });
++</script>
++
++<aside class="flex-col gap-5 w-56 hidden md:flex">
++  {#each links as link}
++    <a href={link.url}
++       class="button-link w-full justify-left"
++       class:button-link-active={link.url === currentPath}
++    >
++      {link.text}
++    </a>
++  {/each}
++</aside>
+diff --git a/src/routes/+layout.svelte b/src/routes/+layout.svelte
+index 91f10de..d28b74f 100644
+--- a/src/routes/+layout.svelte
++++ b/src/routes/+layout.svelte
+@@ -1,64 +1,20 @@
+ <script lang="ts">
+ 	import '../app.postcss';
+-	import { AppShell, AppBar } from '@skeletonlabs/skeleton';
+-	import { authorized } from '$lib/stores';
+-	// Floating UI for Popups
+-	import { computePosition, autoUpdate, flip, shift, offset, arrow } from '@floating-ui/dom';
+-	import { storePopup } from '@skeletonlabs/skeleton';
+-    import { LightSwitch } from '@skeletonlabs/skeleton';
+-    import { initializeStores, Modal, Toast } from '@skeletonlabs/skeleton';
+-    initializeStores();
+-	storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
++
++	import { initializeStores, Modal, Toast } from '@skeletonlabs/skeleton';
++	import Navbar from '../components/navbar.svelte';
++
++	initializeStores();
+ </script>
+ 
+-<!-- App Shell -->
++<svelte:head>
++	<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
++</svelte:head>
+ 
++<!-- App Shell -->
+ <Toast/>
+ <Modal />
+-<AppShell>
+-	<svelte:fragment slot="header">
+-		<!-- App Bar -->
+-		<AppBar class="opacity-80">
+-			<svelte:fragment slot="lead">
+-				<a class="text-3xl uppercase ml-4" href="/">Developer DAO</a></svelte:fragment
+-			>
+-			<svelte:fragment slot="trail">
+-                <LightSwitch />
+-				<a
+-					class="btn btn-sm variant-ghost-surface"
+-					href="/dashboard"
+-					rel="noreferrer"
+-				>
+-					Pricing
+-				</a>
+-				{#if $authorized}
+-					<a
+-						class="btn btn-sm variant-ghost-surface"
+-						href="/dashboard"
+-						rel="noreferrer"
+-					>
+-						Dashboard
+-					</a>
+-				{:else}
+-					<a
+-						class="btn btn-sm variant-ghost-surface"
+-						href="/login"
+-						rel="noreferrer"
+-					>
+-						Login
+-					</a>
+-					<a
+-						class="btn btn-sm variant-ghost-surface"
+-						href="/register"
+-						rel="noreferrer"
+-					>
+-						Register
+-					</a>
+-
+-				{/if}
+-			</svelte:fragment>
+-		</AppBar>
+-	</svelte:fragment>
+-	<!-- Page Route Content -->
++<Navbar />
++<div class="mt-10">
+ 	<slot />
+-</AppShell>
++</div>
+diff --git a/src/routes/+page.svelte b/src/routes/+page.svelte
+index 419da95..0e9042e 100644
+--- a/src/routes/+page.svelte
++++ b/src/routes/+page.svelte
+@@ -1,112 +1,344 @@
+-<div class="container h-full mx-auto flex flex-col justify-center items-center">
+-	<div class="space-y-14 text-center items-center">
+-		<div>
+-			<h1 class="h1 mt-5">
+-				<span
+-					class="bg-primary-800 dark:bg-primary-200 bg-clip-text text-transparent box-decoration-clone md:h-1/4 md:w-1/4"
+-					>Build Web3 With Superior Performance and Reliability</span
+-				>
+-			</h1>
+-			<h2 class="h2 italic">
+-				<span
+-					class="bg-primary-800 dark:bg-primary-200 bg-clip-text text-transparent box-decoration-clone md:h-1/4 md:w-1/4"
+-					>Instantly access 60+ chains and Support Public Goods
+-				</span>
+-			</h2>
+-		</div>
+-		<!-- Animated Logo -->
+-		<div class="flex flex-col lg:flex-row justify-center items-center">
+-			<figure>
+-				<section class="img-bg" />
+-				<svg
+-					xmlns="http://www.w3.org/2000/svg"
+-					class="fill-token -scale-x-[100%]"
+-					viewBox="0 0 200 200"
+-					width="100"
+-					height="100"
+-				>
+-					<circle cx="100" cy="100" r="40" stroke="black" stroke-width="4" fill="black" />
+-					<text
+-						x="-100"
+-						y="100"
+-						textLength="2em"
+-						font-size="30"
+-						alignment-baseline="middle"
+-						text-anchor="middle"
+-						transform="scale(-1, 1)"
+-					>
+-						D_D
+-					</text>
+-				</svg>
+-			</figure>
+-			<!-- / -->
+-			<div class="flex flex-col space-y-4 p-4 justify-center align-center">
+-				<p>Come see what sets us apart from the best!</p>
+-				<a class="btn variant-filled" href="/dashboard" rel="noreferrer">
+-					Get Started
+-				</a>
+-			</div>
+-		</div>
+-	</div>
+-	<div class="logo-cloud flex flex-col lg:flex-row gap-12 lg:space-x-12 justify-center align-center mt-10 lg:mt-0">
+-		<a class="h-92 my-10 lg:my-0 -ml-3 lg:-ml-0" href="/">
+-			<img alt="ethereum" src={'../../ethereum-logo.svg'} />
+-		</a>
+-		<a class="h-32 w-32 lg:pt-2" href="/">
+-			<img alt="scroll" src={'../../scroll-logo.svg'} />
+-		</a>
+-		<a class="h-32 w-32 lg:pt-4" href="/">
+-			<img alt="solana" src={'../../solana-wordmark-white.svg'} />
+-		</a>
+-		<a class="h-32 w-32 lg:pt-2" href="/">
+-			<img alt="polygon" src={'../../polygon-white-logo.svg'} />
+-		</a>
+-		<a class="h-16 w-16 lg:pt-2 ml-6 lg:ml-0" href="/">
+-			<img alt="sui" src={'../../sui-logo-white.svg'} />
+-		</a>
+-
+-		<!-- ... -->
+-	</div>
+-	<div class="flex flex-col lg:flex-row lg:space-x-60 mt-20 lg:mt-10">
+-		<p class="text-xs text-gray-600">© 2024 The Developer DAO Foundation. All rights reserved.</p>
+-		<p />
+-        <p class="text-xs text-gray-600">
+-        Privacy policy
+-        </p>
+-	</div>
+-</div>
+-
+-<style lang="postcss">
+-	figure {
+-		@apply flex relative flex-col;
+-	}
+-	figure svg,
+-	.img-bg {
+-		@apply w-64 h-64 md:w-80 md:h-80;
+-	}
+-	.img-bg {
+-		@apply absolute z-[-1] rounded-full blur-[50px] transition-all;
+-		animation:
+-			pulse 5s cubic-bezier(0, 0, 0, 0.5) infinite,
+-			glow 5s linear infinite;
+-	}
+-	@keyframes glow {
+-		0% {
+-			@apply bg-primary-400/50;
+-		}
+-		33% {
+-			@apply bg-secondary-400/50;
+-		}
+-		66% {
+-			@apply bg-tertiary-400/50;
+-		}
+-		100% {
+-			@apply bg-primary-400/50;
+-		}
+-	}
+-	@keyframes pulse {
+-		50% {
+-			transform: scale(1.5);
+-		}
+-	}
+-</style>
++<section class="container mx-auto flex flex-col items-center justify-center my-24">
++  <div class="label">
++    D_D RPC 1.0 AVAILABLE NOW
++  </div>
++  <h1 class="header-1 max-w-5xl text-center">Your gateway to the decentralized world.</h1>
++  <p class="description max-w-xl text-center">Instantly access 60+ chains and Support Public Goods. Some other claim why we are building this, other claim why we are building this. Perfecto!</p>
++  <div class="flex items-center gap-5 mt-5">
++    <a href="/learn-more" class="button-primary">
++      <span>Learn more</span>
++      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
++        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
++      </svg>
++    </a>
++    <a href="/login" class="button-outline">Get Started</a>
++  </div>
++  <div class="h-[800px] w-full bg-blue-950 text-center mt-20">
++    Product image
++  </div>
++  
++  <p class="description max-w-xl text-center text-white mt-20 my-10">Used by worldwide teams</p>
++  <div class="w-full">
++    <div class="pointer-events-none relative flex gap-10 overflow-hidden">
++      <div class="animate-carrousel flex shrink-0 items-center justify-around gap-10">
++        <img class="aspect-square max-w-[150px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++        <img class="aspect-square max-w-[150px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++        <img class="aspect-square max-w-[150px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++        <img class="aspect-square max-w-[150px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++        <img class="aspect-square max-w-[150px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++      </div>
++      <div aria-hidden="true" class="animate-carrousel flex shrink-0 items-center justify-around gap-10">
++        <img class="aspect-square max-w-[150px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++        <img class="aspect-square max-w-[150px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++        <img class="aspect-square max-w-[150px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++        <img class="aspect-square max-w-[150px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++        <img class="aspect-square max-w-[150px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++      </div>
++    </div>
++  </div>
++
++  <div class="blur-3xl absolute -z-10" aria-hidden="true">
++    <div class="gradient-background"></div>
++  </div>
++</section>
++
++<section class="flex flex-col items-center justify-center w-screen bg-gradient-to-b from-white to-blue-100 left-0 py-20">
++  <div class="label-light">
++    Features
++  </div>
++  <h2 class="header-2 max-w-5xl text-center text-blue-950">Faster and powerful</h2>
++  <p class="description-light max-w-xl text-center">Gain access to a suite of intuitive tools and comprehensive documentation to accelerate your development process.</p>
++  <a href="/login" class="button-outline bg-white text-blue-700 mt-5">Get Started</a>
++
++  <div class="flex container mt-20 gap-5">
++    <div class="flex flex-col gap-5 flex-grow w-1/2 my-auto">
++      <a href="/feature1">
++        <div class="bg-blue-100 px-5 py-2 pr-12 rounded-xl transition-all duration-200">
++          <h3 class="header-3 text-blue-950">High Speed Transactions</h3>
++          <p class="description-light font-light">Enjoy ultra-fast transaction processing to keep your applications running smoothly, no matter the volume.</p>
++          <div class="flex items-center gap-2">
++            <span class="description-light">Learn more</span>
++            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="" class="w-5 h-5 stroke-indigo-900">
++              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
++            </svg>
++          </div>
++        </div>
++      </a>
++      <a href="/feature2">
++        <div class="hover:bg-blue-100 px-5 py-2 pr-12 rounded-xl transition-all duration-200">
++          <h3 class="header-3 text-blue-950">Unparalleled Uptime</h3>
++          <p class="description-light font-light">With our 99.99% uptime guarantee, your projects stay online and operational around the clock.</p>
++          <div class="flex items-center gap-2">
++            <span class="description-light">Learn more</span>
++            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="" class="w-5 h-5 stroke-indigo-900">
++              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
++            </svg>
++          </div>
++        </div>
++      </a>
++      <a href="/feature3">
++        <div class="hover:bg-blue-100 px-5 py-2 pr-12 rounded-xl transition-all duration-200">
++          <h3 class="header-3 text-blue-950">Multi-Chain Accessibility</h3>
++          <p class="description-light font-light">Connect effortlessly to leading blockchains including Ethereum, Binance Smart Chain, and more, all through a single, unified interface.</p>
++          <div class="flex items-center gap-2">
++            <span class="description-light">Learn more</span>
++            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="" class="w-5 h-5 stroke-indigo-900">
++              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
++            </svg>
++          </div>
++        </div>
++      </a>
++    </div>
++    <div class="flex-grow w-1/2 lg:block hidden">
++      <img class="rounded-xl w-full" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="">
++    </div>
++  </div>
++</section>
++
++
++<!-- TODO RESPONSIVE -->
++<section class="w-screen bg-white left-0 py-20">
++  <div class="container mx-auto">
++    <div class="label-light w-fit">
++      More cool stuff
++    </div>
++    <h2 class="header-2 max-w-5xl  text-blue-950">Lorem ipsum dolor sit amet.</h2>
++  </div>
++
++  <div class="container mx-auto flex gap-5 mt-20">
++    <div class="flex flex-col justify-between flex-grow w-1/2 md:1/3 h-[500px] bg-blue-100 rounded-xl p-5 shadow-md">
++      <img class="aspect-square max-w-[75px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++      <div>
++        <div class="text-7xl font-semibold from-blue-600 to-purple-600 bg-gradient-to-br bg-clip-text text-transparent tracking-tighter">3X</div>
++        <div class="description-light text-lg">Some improvement</div>
++      </div>
++      <div class="flex items-center gap-5">
++        <img class="aspect-square max-w-[65px] rounded-full object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++        <div>
++          <div class="description-light font-medium leading-[15px]">John Doe</div>
++          <div class="description-light font-light leading-[15px]">Head of Sales @ Acme. Inc.</div>
++        </div>
++      </div>
++    </div>
++    
++    <div class="flex flex-col justify-between flex-grow w-1/2 md:1/3 h-[500px] bg-blue-100 rounded-xl p-5 shadow-md">
++      <img class="aspect-square max-w-[75px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++      <div>
++        <div class="text-7xl font-semibold from-blue-600 to-purple-600 bg-gradient-to-br bg-clip-text text-transparent tracking-tighter">$6.9k</div>
++        <div class="description-light text-lg">Some improvement</div>
++      </div>
++      <div class="flex items-center gap-5">
++        <img class="aspect-square max-w-[65px] rounded-full object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++        <div>
++          <div class="description-light font-medium leading-[15px]">John Doe</div>
++          <div class="description-light font-light leading-[15px]">Chief Meme Officer @ Acme. Inc.</div>
++        </div>
++      </div>
++    </div>
++
++    <div class="flex flex-col justify-between flex-grow w-1/2 md:1/3 h-[500px] bg-blue-100 rounded-xl p-5 shadow-md">
++      <img class="aspect-square max-w-[75px] rounded-md object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++      <div>
++        <div class="text-7xl font-semibold from-blue-600 to-purple-600 bg-gradient-to-br bg-clip-text text-transparent tracking-tighter">33%</div>
++        <div class="description-light text-lg">Some improvement</div>
++      </div>
++      <div class="flex items-center gap-5">
++        <img class="aspect-square max-w-[65px] rounded-full object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++        <div>
++          <div class="description-light font-medium leading-[15px]">John Doe</div>
++          <div class="description-light font-light leading-[15px]">Head of Sales @ Acme. Inc.</div>
++        </div>
++      </div>
++    </div>
++  </div>
++</section>
++
++<section class="container mx-auto flex flex-col items-center justify-center my-24">
++  <div class="label">
++    Even more cool stuff
++  </div>
++  <h2 class="header-2 max-w-5xl text-center">Lorem ipsum dolor sit amet.</h2>
++  <p class="description max-w-xl text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus architecto ea tempore minima excepturi commodi sint tenetur natus temporibus quisquam?</p>
++  <div class="flex items-center gap-5 mt-5">
++    <a href="/learn-more" class="button-primary">
++      <span>Learn more</span>
++    </a>
++  </div>
++
++  <div class="flex flex-col gap-20 w-full mt-20">
++    <div class="flex w-full h-[600px] border border-blue-800 hover:border-blue-600 rounded-xl p-5 bg-background">
++      <div class="flex flex-col justify-center flex-grow w-1/2 ml-10">
++        <h3 class="header-3 m-0">Some cool title</h3>
++        <div class="header-3 m-0 text-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, molestiae.</div>
++        <a href="/login" class="button-outline mt-5">
++          Get Started
++          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
++            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
++          </svg>
++        </a>
++      </div>
++      <div class="flex flex-col items-center justify-center flex-grow w-1/2">
++        <img class="w-fit" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="">
++      </div>
++    </div>
++
++    <div class="flex w-full h-[600px] border border-blue-800 hover:border-blue-600 rounded-xl p-5 bg-background">
++      <div class="flex flex-col items-center justify-center flex-grow w-1/2">
++        <img class="w-fit" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="">
++      </div>
++      <div class="flex flex-col justify-center flex-grow w-1/2 ml-10">
++        <h3 class="header-3 m-0">Some cool title</h3>
++        <div class="header-3 m-0 text-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, molestiae.</div>
++        <a href="/login" class="button-outline mt-5">
++          Get Started
++          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
++            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
++          </svg>
++        </a>
++      </div>
++    </div>
++
++    <div class="flex w-full h-[600px] border border-blue-800 hover:border-blue-600 rounded-xl p-5 bg-background">
++      <div class="flex flex-col justify-center flex-grow w-1/2 ml-10">
++        <h3 class="header-3 m-0">Some cool title</h3>
++        <div class="header-3 m-0 text-description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio, molestiae.</div>
++        <a href="/login" class="button-outline mt-5">
++          Get Started
++          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
++            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
++          </svg>
++        </a>
++      </div>
++      <div class="flex flex-col items-center justify-center flex-grow w-1/2">
++        <img class="w-fit" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="">
++      </div>
++    </div>
++  </div>
++
++  <div class="flex flex-col w-full mt-20">
++    <h2 class="header-2 ml-10">Some other summary</h2>
++    <div class="mx-10">
++      <div class="flex container mx-auto flex gap-5 mt-20">
++        <a href="/1" class="flex flex-col justify-between flex-grow w-1/2 md:1/3 h-[300px]">
++          <div>
++            <img class="aspect-square max-w-[65px] rounded-full object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++            <h3 class="header-3">Something 1</h3>
++            <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, animi?</p>
++          </div>
++          <div class="flex items-center gap-2">
++            <span class="description-light text-description">Learn more</span>
++            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="" class="w-5 h-5 stroke-description">
++              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
++            </svg>
++          </div>
++        </a>
++
++        <a href="/2" class="flex flex-col justify-between flex-grow w-1/2 md:1/3 h-[300px]">
++          <div>
++            <img class="aspect-square max-w-[65px] rounded-full object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++            <h3 class="header-3">Something 2</h3>
++            <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, animi?</p>
++          </div>
++          <div class="flex items-center gap-2">
++            <span class="description-light text-description">Learn more</span>
++            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="" class="w-5 h-5 stroke-description">
++              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
++            </svg>
++          </div>
++        </a>
++
++        <a href="/3" class="flex flex-col justify-between flex-grow w-1/2 md:1/3 h-[300px]">
++          <div>
++            <img class="aspect-square max-w-[65px] rounded-full object-cover shadow-md saturate-[0.1]" src="https://s2.coinmarketcap.com/static/img/coins/200x200/24478.png" alt="" />
++            <h3 class="header-3">Something 3</h3>
++            <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique, animi?</p>
++          </div>
++          <div class="flex items-center gap-2">
++            <span class="description-light text-description">Learn more</span>
++            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="" class="w-5 h-5 stroke-description">
++              <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
++            </svg>
++          </div>
++        </a>
++      </div>
++    </div>
++  </div>
++  
++  <div class="blur-3xl absolute -z-10" aria-hidden="true">
++    <div class="gradient-background"></div>
++  </div>
++</section>
++
++<section class="flex flex-col items-center justify-center w-screen bg-gradient-to-b from-white to-blue-100 left-0 py-20">
++  <div class="label-light">
++    Pricing
++  </div>
++  <h2 class="header-2 max-w-5xl text-center text-blue-950">Choose the best plan</h2>
++  <p class="description-light max-w-xl text-center">Whether you're just starting out or scaling up, we offer a range of plans designed to fit your project's size and scope.</p>
++  <!-- <a href="/login" class="button-outline bg-white text-blue-700 mt-5">Get Started</a> -->
++
++  <div class="flex container mx-auto flex gap-5 mt-20">
++    <div class="flex flex-col justify-between flex-grow w-1/2 md:1/3 border border-blue-300 rounded-xl">
++      <div class="border-b border-blue-300 p-5 bg-white rounded-t-xl">
++        <h3 class="header-3 text-blue-950 m-0">Starter Plan</h3>
++        <p class="description m-0 mt-1 text-sm">Beginner-friendly, essential features included.</p>
++      </div>
++      <div class="p-5">
++        <p class="header-3 text-4xl text-blue-950 m-0">$10<span class="text-base text-blue-950">/mo</span></p>
++        <p class="description">Requests: Up to 100,000 per month</p>
++        <p class="description">Support: Community Support</p>
++      </div>
++      <div class="flex items-center gap-2 p-5">
++        <a href="/login" class="button-outline w-full justify-center text-blue-950">Create your free account</a>
++      </div>
++    </div>
++    <div class="flex flex-col justify-between flex-grow w-1/2 md:1/3 border border-blue-300 rounded-xl">
++      <div class="border-b border-blue-300 p-5 bg-white rounded-t-xl">
++        <h3 class="header-3 text-blue-950 m-0 flex items-center gap-3">Pro Plan <div class="label-light h-fit">Best price</div></h3>
++        <p class="description m-0 mt-1 text-sm">Enhanced access, professional developer support.</p>
++      </div>
++      <div class="p-5">
++        <p class="header-3 text-4xl text-blue-950 m-0">$10<span class="text-base text-blue-950">/mo</span></p>
++        <p class="description">Requests: Up to 1 million per month</p>
++        <p class="description">Support: Email Support</p>
++        <p class="description">Enhanced API Rate Limits</p>
++      </div>
++      <div class="flex items-center gap-2 p-5">
++        <a href="/learn-more" class="button-primary w-full justify-center">
++          <span>Learn more</span>
++          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
++            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" />
++          </svg>
++        </a>
++      </div>
++    </div>
++    <div class="flex flex-col justify-between flex-grow w-1/2 md:1/3 border border-blue-300 rounded-xl">
++      <div class="border-b border-blue-300 p-5 bg-white rounded-t-xl">
++        <h3 class="header-3 text-blue-950 m-0">Enterprise Plan</h3>
++        <p class="description m-0 mt-1 text-sm">Scalable, secure, full-service solution.</p>
++      </div>
++      <div class="p-5">
++        <p class="header-3 text-4xl text-blue-950 m-0">Contact Sales</p>
++        <p class="description">Requests: Unlimited</p>
++        <p class="description">Support: 24/7 Priority Support</p>
++        <p class="description">Custom Integration Support</p>
++      </div>
++      <div class="flex items-center gap-2 p-5">
++        <a href="/login" class="button-outline w-full justify-center text-blue-950">Create your free account</a>
++      </div>
++    </div>
++  </div>
++
++</section>
++
++<section class="container mx-auto flex flex-col my-24">
++  <div class="label w-fit">
++    D_D RPC 1.0 AVAILABLE NOW
++  </div>
++  <h2 class="header-2 max-w-5xl">Something more here</h2>
++  <p class="description max-w-xl">Build Web3 With Superior Performance and Reliability. Instantly access 60+ chains and Support Public Goods</p>
++
++  <div class="blur-3xl absolute -z-10" aria-hidden="true">
++    <div class="gradient-background"></div>
++  </div>
++</section>
+\ No newline at end of file
+diff --git a/src/routes/dashboard/+page.svelte b/src/routes/dashboard/+page.svelte
+index 96164db..9e1a31d 100644
+--- a/src/routes/dashboard/+page.svelte
++++ b/src/routes/dashboard/+page.svelte
+@@ -4,6 +4,8 @@
+ 	import { onMount } from 'svelte';
+ 	import { apiKeys, authorized, type Keys } from '$lib/stores';
+ 	import { getModalStore, type ModalSettings } from '@skeletonlabs/skeleton';
++	import Sidebar from '../../components/sidebar.svelte'
++
+ 	const modalStore = getModalStore();
+ 	const newKey = async (): Promise<void> => {
+ 		await axios('http://localhost:3000/api/keys', { withCredentials: true, method: 'post' })
+@@ -78,7 +80,45 @@
+ 	});
+ </script>
+ 
+-<div class="h-screen flex flex-col justify-center items-center">
++<div class="container mx-auto flex gap-10">
++	<Sidebar />
++	<div class="w-full">
++		<div class="flex justify-between items-center">
++			<h1 class="header-3 my-0">API Keys</h1>
++			<button class="button-primary" on:click={() => newKey()}>
++				Create New
++			</button>
++		</div>
++		<div class="overflow-x-auto relative shadow-md rounded-lg border border-blue-800 mt-5">
++			<table class="w-full text-sm text-left text-gray-500 border-collapse rounded-lg overflow-hidden">
++				<thead class="text-xs text-gray-700 uppercase">
++					<tr>
++						<th scope="col" class="p-5 border-b border-blue-800">ID</th>
++						<th scope="col" class="p-5 border-b border-blue-800">API Key</th>
++						<th scope="col" class="p-5 border-b border-blue-800">Action</th>
++					</tr>
++				</thead>
++				<tbody>
++					{#each $apiKeys as row, i}
++						<tr class="">
++							<td class="p-5">{i}</td>
++							<td class="p-5">{row.apikey}</td>
++							<td class="p-5">
++								<button 
++									class="text-red-600 font-bold"
++									on:click={() => onConfirm(row.apikey)}>Delete
++								</button>
++							</td>
++						</tr>
++					{/each}
++				</tbody>
++			</table>
++		</div>
++	</div>
++</div>
++
++
++<!-- <div class="h-screen flex flex-col justify-center items-center">
+ 	{#if $authorized}
+ 		<div class="flex table-container w-2/3">
+ 			<table class="table table-hover">
+@@ -120,4 +160,4 @@
+ 		<p>or</p>
+ 		<a href="/register" class="btn variant-ghost mt-5">Register</a>
+ 	{/if}
+-</div>
++</div> -->
+diff --git a/src/routes/login/+page.svelte b/src/routes/login/+page.svelte
+index 1815eb0..99ed3e2 100644
+--- a/src/routes/login/+page.svelte
++++ b/src/routes/login/+page.svelte
+@@ -4,11 +4,13 @@
+ 	import axios from 'axios';
+ 	import { getToastStore, type ToastSettings } from '@skeletonlabs/skeleton';
+ 
+-	let ep: LoginRequest = { email: undefined, password: undefined };
++	let loginFields: LoginRequest = { email: '', password: '' };
++
+ 	const toast = getToastStore();
++
+ 	type LoginRequest = {
+-		email?: string;
+-		password?: string;
++		email: string;
++		password: string;
+ 	};
+ 
+ 	const toastSettings: ToastSettings = {
+@@ -21,8 +23,8 @@
+ 			.post(
+ 				'http://localhost:3000/api/login',
+ 				{
+-					email: login?.email,
+-					password: login?.password
++					email: login.email,
++					password: login.password
+ 				},
+ 				{
+ 					withCredentials: true
+@@ -33,7 +35,7 @@
+ 					authorized.update(() => {
+ 						return true;
+ 					});
+-					location.href = './dashboard';
++					location.href = '/dashboard';
+ 				} else {
+ 					toast.trigger(toastSettings);
+ 				}
+@@ -45,44 +47,48 @@
+ 	};
+ </script>
+ 
+-<div class="flex mx-auto h-screen justify-center items-center align-middle">
++<div class="container mx-auto px-5">
+ 	<form
++		class="max-w-xl mx-auto"
+ 		name="login"
+ 		on:submit={() => {
+-			tryLogin(ep);
++			tryLogin(loginFields);
+ 		}}
+-		class="h-1/2 w-1/2 flex flex-col"
+ 	>
+-		<header class="font-bold text-xl self-center">Login</header>
+-		<hr class="!border-t-8 mt-5" />
+-		<section class="mt-5 space-y-2">
+-			<label class="label">
+-				<span>Email</span>
++		<h1 class="font-bold text-xl self-center">Login</h1>
++		<div class="mt-5 space-y-2">
++			<div class="flex flex-col">
++				<label for="email">Email</label>
+ 				<input
+ 					id="email"
+-					bind:value={ep.email}
++					bind:value={loginFields.email}
+ 					class="input"
+ 					type="text"
+-					placeholder="Input"
++					placeholder="vitalik@developerdao.com"
+ 					required
+ 					autocomplete="email"
+ 				/>
+-			</label>
+-			<label class="label">
+-				<span>Password</span>
++			</div>
++			<div class="flex flex-col">
++				<label for="password">Password</label>
+ 				<input
+ 					id="password"
+-					bind:value={ep.password}
++					bind:value={loginFields.password}
+ 					class="input"
+ 					type="password"
+-					placeholder="Input"
++					placeholder="Enter your password"
+ 					required
+ 				/>
+-			</label>
+-		</section>
+-		<div class="flex flex-row justify-end space-x-2">
+-			<a href="/recovery" class="btn variant-ghost mt-5"> Forgot Password </a>
+-			<button type="submit" class="btn variant-filled mt-5"> Sign-In </button>
++			</div>
++		</div>
++		
++		<div class="flex flex-row justify-between space-x-2">
++			<a href="/recovery" class="button-outline mt-5"> Forgot Password </a>
++			<button type="submit" class="button-primary mt-5"> Sign-In </button>
+ 		</div>
++		<div class="mt-3">
++			You don't have an account? <a href="/register" class="underline">Register Here</a>
++		</div>
++
+ 	</form>
+ </div>
+diff --git a/src/routes/register/+page.svelte b/src/routes/register/+page.svelte
+index d8b4b6e..37790df 100644
+--- a/src/routes/register/+page.svelte
++++ b/src/routes/register/+page.svelte
+@@ -4,23 +4,25 @@
+ 	import { Stepper, Step, type ToastSettings } from '@skeletonlabs/skeleton';
+ 	import { getToastStore } from '@skeletonlabs/skeleton';
+ 
+-	let passwordConfirmation: string = '';
+ 	type RegisterUser = {
+ 		email: string;
+ 		password: string;
++		passwordConfirmation: string;
+ 		wallet: string;
+ 	};
+ 
+ 	type ActivationRequest = {
+-		email: string;
+ 		code: string;
+ 	};
+ 
+-	let registration: RegisterUser = { email: '', password: '', wallet: '' };
+-	let activation: ActivationRequest = { email: '', code: '' };
++	let registerFormValues: RegisterUser = { email: '', password: '', passwordConfirmation: '', wallet: '' };
++	let activationFormValues: ActivationRequest = { code: '' };
++
++	let showRegisterForm = true;
++	let showActivationForm = false;
+ 
+ 	const register = async (userInfo: RegisterUser): Promise<void> => {
+-		console.log('Registering user...');
++		console.log('Registering user...', userInfo);
+ 		await axios
+ 			.post('http://localhost:3000/api/register', {
+ 				email: userInfo.email,
+@@ -30,6 +32,8 @@
+ 			.then((ret: AxiosResponse) => {
+ 				if (ret.status === 200) {
+ 					console.log('Successfully registered user');
++					showRegisterForm = false;
++					showActivationForm = true;
+ 				}
+ 			})
+ 			.catch((error: AxiosError) => {
+@@ -40,19 +44,18 @@
+ 	const activate = async (activationInfo: ActivationRequest): Promise<void> => {
+ 		await axios
+ 			.post('http://localhost:3000/api/activate', {
+-				email: activationInfo.email,
++				email: registerFormValues.email,
+ 				code: activationInfo.code
+ 			})
+ 			.then((ret: AxiosResponse) => {
+ 				if (ret.status === 200) {
+ 					location.href = './login';
+ 				} else {
+-			        getToastStore().trigger(toastSettings);
+-                }
++					getToastStore().trigger(toastSettings);
++        }
+ 			})
+ 			.catch((error: AxiosError) => {
+-    	        getToastStore().trigger(toastSettings);
+-				console.error(error);
++					getToastStore().trigger(toastSettings);
+ 			});
+ 	};
+ 
+@@ -61,110 +64,72 @@
+ 	    background: 'variant-filled-error',
+ 	};
+ 
+-	const tryActivate = async (activation: ActivationRequest): Promise<void> => {
+-		if (activation.code.length === 8) {
+-			console.log(`Code sent: ${activation.code}`);
+-			await activate(activation);
+-		} 
+-	};
+-
+-	$: tryActivate(activation);
+-
+-	$: {
+-		activation.email = registration.email;
+-	}
+ </script>
+ 
+-<div>
+-	<Stepper on:next={async () => await register(registration)}>
+-		<Step
+-			class="ml-5 mr-5"
+-			locked={!(
+-				passwordConfirmation === registration.password &&
+-				registration.password !== '' &&
+-				registration.password.length >= 8 &&
+-				registration.email !== '' &&
+-				passwordConfirmation !== '' &&
+-				registration.wallet !== '' &&
+-				registration.email.includes('@') &&
+-				registration.wallet.startsWith('0x') &&
+-				registration.wallet.length === 42
+-			)}
+-		>
+-			<svelte:fragment slot="header">Create Account</svelte:fragment>
+-			<form name="register" class="flex h-3/4 justify-center items-middle align-middle">
+-				<div class="flex flex-col justify-center items-center">
+-					<section class="mt-5 space-y-2">
+-						<label class="label">
+-							<span>Email</span>
+-							<input
+-								id="email"
+-								bind:value={registration.email}
+-								class="input"
+-								type="text"
+-								placeholder="emailaddress@aim.com"
+-								required
+-								autocomplete="email"
+-							/>
+-						</label>
+-						<label class="label">
+-							<span>Password</span>
+-							<input
+-								id="password"
+-								bind:value={registration.password}
+-								class="input"
+-								type="password"
+-								placeholder="..."
+-								required
+-							/>
+-						</label>
+-						<label class="label">
+-							<span>Confirm Password</span>
+-							<input
+-								id="pwconfirm"
+-								bind:value={passwordConfirmation}
+-								class="input"
+-								type="password"
+-								placeholder="..."
+-								required
+-							/>
+-						</label>
++<div class="container mx-auto px-5">
++	{#if showRegisterForm}
++		<form class="max-w-xl mx-auto space-y-2" name="register" on:submit={() => {register(registerFormValues)}}>
++				<h1 class="font-bold text-xl self-center">Create Account</h1>
++				<div class="flex flex-col">
++						<label for="email">Email</label>
++						<input 
++							bind:value={registerFormValues.email}
++							class="input"
++							type="text"
++							placeholder="vitalik@developerdao.com"
++							required
++							autocomplete="email"
++						/>
++				</div>
++				<div class="flex flex-col">
++						<label for="password">Password</label>
++						<input 
++							bind:value={registerFormValues.password}
++							class="input"
++							type="password"
++							placeholder="Enter your password"
++							required
++						/>
++				</div>
++				<div class="flex flex-col">
++						<label for="pwconfirm">Confirm Password</label>
++						<input 
++							bind:value={registerFormValues.passwordConfirmation}
++							class="input"
++							type="password"
++							placeholder="Repeat your password"
++							required
++						/>
++				</div>
++				<div class="flex flex-col">
++						<label for="wallet">Ethereum Wallet</label>
++						<input 
++							bind:value={registerFormValues.wallet}
++							class="input"
++							type="text"
++							placeholder="0x..."
++							required
++						/>
++				</div>
++				<div class="flex space-x-2 justify-end">
++					<button type="submit" class="button-primary mt-5">Register</button>
++				</div>
++		</form>
++		{/if}
+ 
+-						<label id="wallet" class="label">
+-							<span>Ethereum Wallet</span>
+-							<input
+-								id="wallet"
+-								bind:value={registration.wallet}
+-								class="input"
+-								type="text"
+-								placeholder="0x..."
+-								required
+-							/>
+-						</label>
+-					</section>
++		{#if showActivationForm}
++		<form class="max-w-xl mx-auto space-y-2" name="activate" on:submit={() => {activate(activationFormValues)}}>
++				<h1 class="font-bold text-xl self-center">Activate Your Account</h1>
++				<div class="flex flex-col">
++						<label for="code">Activation Code</label>
++						<input bind:value={activationFormValues.code} class="input" type="text" placeholder="00000000" required/>
+ 				</div>
+-			</form>
+-		</Step>
+-		<Step class="ml-5">
+-			<svelte:fragment slot="header">{`Time to activate your account! Please check ${registration.email} for the activation code. `}</svelte:fragment>
+-			<form name="activate" class="flex h-3/4 justify-center items-middle align-middle">
+-				<div class="flex flex-col justify-center items-center">
+-					<section class="mt-5 space-y-2">
+-						<label class="label">
+-							<span>Activation Code</span>
+-							<input
+-								id="code"
+-								bind:value={activation.code}
+-								class="input"
+-								type="text"
+-								placeholder="00000000"
+-								required
+-							/>
+-						</label>
+-					</section>
++				<div class="flex space-x-2 justify-end">
++					<button type="submit" class="button-primary mt-5">Activate</button>
+ 				</div>
+-			</form>
+-		</Step>
+-		<!-- ... -->
+-	</Stepper>
+-</div>
++		</form>
++		{/if}
++	<div class="mt-3 max-w-xl mx-auto">
++		Do you have an account? <a href="/login" class="underline">Login Here</a>
++	</div>
++</div>
+\ No newline at end of file
+diff --git a/src/styles/global.css b/src/styles/global.css
+new file mode 100644
+index 0000000..9000f26
+--- /dev/null
++++ b/src/styles/global.css
+@@ -0,0 +1,138 @@
++:root {
++	--background: #070018;
++	--description: #968aa0;
++}
++
++html {
++	@apply bg-background
++}
++
++body * {
++	font-family: "Be Vietnam Pro", sans-serif;
++	color: white;
++}
++
++
++/* Buttons */
++.button-primary {
++	@apply flex gap-3 w-fit px-5 py-3 bg-blue-600 rounded-lg text-sm items-center;
++
++	box-shadow: rgba(16, 24, 40, 0.05) 0px 1px 2px 0px, 
++            	rgba(0, 0, 0, 0.25) 0px -2px 0px 0px inset, 
++            	rgba(255, 255, 255, 0.13) 0px 1px 0px 0px inset;
++	transition: all 0.2s ease;
++}
++.button-primary:hover {
++	@apply hover:bg-blue-700;
++	box-shadow: none
++}
++
++.button-link {
++	@apply flex gap-3 w-fit px-5 py-3 bg-[#251E36] rounded-lg text-sm items-center;
++
++	box-shadow: rgba(16, 24, 40, 0.05) 0px 1px 2px 0px, 
++            	rgba(0, 0, 0, 0.25) 0px -2px 0px 0px inset, 
++            	rgba(255, 255, 255, 0.13) 0px 1px 0px 0px inset;
++	transition: all 0.2s ease;
++}
++.button-link-active {
++	@apply flex gap-3 w-fit px-5 py-3 bg-blue-600 rounded-lg text-sm items-center;
++
++	box-shadow: rgba(16, 24, 40, 0.05) 0px 1px 2px 0px, 
++            	rgba(0, 0, 0, 0.25) 0px -2px 0px 0px inset, 
++            	rgba(255, 255, 255, 0.13) 0px 1px 0px 0px inset;
++}
++.button-link:hover, .button-link-active:hover {
++	@apply hover:bg-blue-700;
++	box-shadow: none
++}
++
++.button-transparent {
++	@apply flex gap-3 w-fit px-5 py-3 bg-transparent rounded-lg text-sm items-center;
++}
++
++.button-outline {
++	@apply flex gap-3 w-fit px-5 py-3 rounded-lg text-sm border border-blue-800 hover:border-blue-600 items-center;	
++	transition: all 0.2s ease;
++}
++/* End Buttons */
++
++/* Inputs */
++.input {
++	@apply bg-transparent px-5 py-3 border-[#4b4f5b] focus:border-blue-600 rounded-lg !important;
++}
++/* End Inputs */
++
++
++/* Text */
++.header-1 {
++	@apply my-5 text-7xl font-medium;
++}
++
++.header-2 {
++	@apply my-5 text-5xl font-medium;
++}
++
++.header-3 {
++	@apply my-3 text-2xl font-medium;
++}
++
++.description {
++	@apply my-2 text-description;
++}
++.description-light {
++	@apply my-2 text-indigo-900;
++}
++/* End Texts */
++
++.label {
++	@apply flex gap-1 bg-blue-950 text-blue-200 font-medium text-xs px-2 py-1 rounded-md shadow-md;
++
++	font-family: "IBM Plex Mono", monospace;
++	text-transform: uppercase;
++}
++.label-light {
++	@apply flex gap-1 bg-blue-200 text-blue-600 font-medium text-xs px-2 py-1 rounded-md shadow-md;
++
++	font-family: "IBM Plex Mono", monospace;
++	text-transform: uppercase;
++}
++.label-light:before, .label:before {
++	content: "•";
++	font-size: 14px;
++}
++
++.gradient-background {
++  position: relative;
++  left: calc(0% + 3rem);
++  width: 36.125rem;
++  transform: translateX(-100%) translateY(-80%) scale(1.2);
++  height: 36.125rem;
++  background-image: linear-gradient(to bottom right, #2a27ac, #3e3af2);
++  opacity: 0.3;
++  clip-path: polygon(74% 44.1%, 99.9% 61.6%, 97.4% 26.9%, 85.4% 0.1%, 80.6% 2%, 72.4% 32.5%, 97.4% 74.87%, 27.05% 96.87%, 89% 14.45%, 47.3% 38.12%, 43.22% 13.63%, 7.12% 66.77%, 23.49% 8.79%, 36.29% 93.75%, 0% 64.9%, 17.8% 100%, 5.43% 19.43%, 76% 97.7%, 65.5% 49.7%);
++}
++
++.divider {
++	@apply container mx-auto;
++}
++
++.divider:before {
++  position: relative;
++  float: left;
++  background: linear-gradient(to right, #c8c8c800, #4b4f5b 50%);
++  margin-top: 2px;
++  width: 50%;
++  height: 0.5px;
++  content:"";
++}
++
++.divider:after {
++  position: relative;
++  float: right;
++  background: linear-gradient(to left, #c8c8c800, #4b4f5b 50%);
++  margin-top: 2px;
++  width: 50%;
++  height: 0.5px;
++  content:"";  
++}
+\ No newline at end of file
+diff --git a/tailwind.config.ts b/tailwind.config.ts
+index 9f08643..1453b42 100644
+--- a/tailwind.config.ts
++++ b/tailwind.config.ts
+@@ -2,26 +2,47 @@ import { join } from 'path'
+ import type { Config } from 'tailwindcss'
+ import forms from '@tailwindcss/forms';
+ import typography from '@tailwindcss/typography';
+-import { skeleton } from '@skeletonlabs/tw-plugin'
+ 
+ export default {
+ 	darkMode: 'class',
+ 	content: ['./src/**/*.{html,js,svelte,ts}', join(require.resolve('@skeletonlabs/skeleton'), '../**/*.{html,js,svelte,ts}')],
+ 	theme: {
+-		extend: {},
++		extend: {
++			colors: {
++				'blue': {
++					'50': '#edf2ff',
++					'100': '#dde7ff',
++					'200': '#c3d1ff',
++					'300': '#9eb2ff',
++					'400': '#7789ff',
++					'500': '#5761fd',
++					'600': '#3e3af2',
++					'700': '#332cd6',
++					'800': '#2a27ac',
++					'900': '#282788',
++					'950': '#19174f',
++				},
++				background: 'var(--background)',
++				description: 'var(--description)',
++			}
++		},
++		animation: {
++			carrousel: "carrousel 20s linear infinite"
++		},
++		keyframes: {
++			carrousel: {
++				from: {
++					transform: 'translateX(0)',
++				},
++				to: {
++					transform: 'translateX(calc(-100% - 2.5rem))',
++				},
++			}
++		}
+ 	},
+ 	plugins: [
+ 		forms,
+-		typography,
+-		skeleton({
+-			themes: {
+-				preset: [
+-					{
+-						name: 'wintry',
+-						enhancements: true,
+-					},
+-				],
+-			},
+-		}),
++		typography
+ 	],
+ } satisfies Config;
++

@@ -4,23 +4,25 @@
 	import { Stepper, Step, type ToastSettings } from '@skeletonlabs/skeleton';
 	import { getToastStore } from '@skeletonlabs/skeleton';
 
-	let passwordConfirmation: string = '';
 	type RegisterUser = {
 		email: string;
 		password: string;
+		passwordConfirmation: string;
 		wallet: string;
 	};
 
 	type ActivationRequest = {
-		email: string;
 		code: string;
 	};
 
-	let registration: RegisterUser = { email: '', password: '', wallet: '' };
-	let activation: ActivationRequest = { email: '', code: '' };
+	let registerFormValues: RegisterUser = { email: '', password: '', passwordConfirmation: '', wallet: '' };
+	let activationFormValues: ActivationRequest = { code: '' };
+
+	let showRegisterForm = true;
+	let showActivationForm = false;
 
 	const register = async (userInfo: RegisterUser): Promise<void> => {
-		console.log('Registering user...');
+		console.log('Registering user...', userInfo);
 		await axios
 			.post('http://localhost:3000/api/register', {
 				email: userInfo.email,
@@ -30,6 +32,8 @@
 			.then((ret: AxiosResponse) => {
 				if (ret.status === 200) {
 					console.log('Successfully registered user');
+					showRegisterForm = false;
+					showActivationForm = true;
 				}
 			})
 			.catch((error: AxiosError) => {
@@ -40,19 +44,18 @@
 	const activate = async (activationInfo: ActivationRequest): Promise<void> => {
 		await axios
 			.post('http://localhost:3000/api/activate', {
-				email: activationInfo.email,
+				email: registerFormValues.email,
 				code: activationInfo.code
 			})
 			.then((ret: AxiosResponse) => {
 				if (ret.status === 200) {
 					location.href = './login';
 				} else {
-			        getToastStore().trigger(toastSettings);
-                }
+					getToastStore().trigger(toastSettings);
+        }
 			})
 			.catch((error: AxiosError) => {
-    	        getToastStore().trigger(toastSettings);
-				console.error(error);
+					getToastStore().trigger(toastSettings);
 			});
 	};
 
@@ -61,110 +64,72 @@
 	    background: 'variant-filled-error',
 	};
 
-	const tryActivate = async (activation: ActivationRequest): Promise<void> => {
-		if (activation.code.length === 8) {
-			console.log(`Code sent: ${activation.code}`);
-			await activate(activation);
-		} 
-	};
-
-	$: tryActivate(activation);
-
-	$: {
-		activation.email = registration.email;
-	}
 </script>
 
-<div>
-	<Stepper on:next={async () => await register(registration)}>
-		<Step
-			class="ml-5 mr-5"
-			locked={!(
-				passwordConfirmation === registration.password &&
-				registration.password !== '' &&
-				registration.password.length >= 8 &&
-				registration.email !== '' &&
-				passwordConfirmation !== '' &&
-				registration.wallet !== '' &&
-				registration.email.includes('@') &&
-				registration.wallet.startsWith('0x') &&
-				registration.wallet.length === 42
-			)}
-		>
-			<svelte:fragment slot="header">Create Account</svelte:fragment>
-			<form name="register" class="flex h-3/4 justify-center items-middle align-middle">
-				<div class="flex flex-col justify-center items-center">
-					<section class="mt-5 space-y-2">
-						<label class="label">
-							<span>Email</span>
-							<input
-								id="email"
-								bind:value={registration.email}
-								class="input"
-								type="text"
-								placeholder="emailaddress@aim.com"
-								required
-								autocomplete="email"
-							/>
-						</label>
-						<label class="label">
-							<span>Password</span>
-							<input
-								id="password"
-								bind:value={registration.password}
-								class="input"
-								type="password"
-								placeholder="..."
-								required
-							/>
-						</label>
-						<label class="label">
-							<span>Confirm Password</span>
-							<input
-								id="pwconfirm"
-								bind:value={passwordConfirmation}
-								class="input"
-								type="password"
-								placeholder="..."
-								required
-							/>
-						</label>
+<div class="container mx-auto px-5">
+	{#if showRegisterForm}
+		<form class="max-w-xl mx-auto space-y-2" name="register" on:submit={() => {register(registerFormValues)}}>
+				<h1 class="font-bold text-xl self-center">Create Account</h1>
+				<div class="flex flex-col">
+						<label for="email">Email</label>
+						<input 
+							bind:value={registerFormValues.email}
+							class="input"
+							type="text"
+							placeholder="vitalik@developerdao.com"
+							required
+							autocomplete="email"
+						/>
+				</div>
+				<div class="flex flex-col">
+						<label for="password">Password</label>
+						<input 
+							bind:value={registerFormValues.password}
+							class="input"
+							type="password"
+							placeholder="Enter your password"
+							required
+						/>
+				</div>
+				<div class="flex flex-col">
+						<label for="pwconfirm">Confirm Password</label>
+						<input 
+							bind:value={registerFormValues.passwordConfirmation}
+							class="input"
+							type="password"
+							placeholder="Repeat your password"
+							required
+						/>
+				</div>
+				<div class="flex flex-col">
+						<label for="wallet">Ethereum Wallet</label>
+						<input 
+							bind:value={registerFormValues.wallet}
+							class="input"
+							type="text"
+							placeholder="0x..."
+							required
+						/>
+				</div>
+				<div class="flex space-x-2 justify-end">
+					<button type="submit" class="button-primary mt-5">Register</button>
+				</div>
+		</form>
+		{/if}
 
-						<label id="wallet" class="label">
-							<span>Ethereum Wallet</span>
-							<input
-								id="wallet"
-								bind:value={registration.wallet}
-								class="input"
-								type="text"
-								placeholder="0x..."
-								required
-							/>
-						</label>
-					</section>
+		{#if showActivationForm}
+		<form class="max-w-xl mx-auto space-y-2" name="activate" on:submit={() => {activate(activationFormValues)}}>
+				<h1 class="font-bold text-xl self-center">Activate Your Account</h1>
+				<div class="flex flex-col">
+						<label for="code">Activation Code</label>
+						<input bind:value={activationFormValues.code} class="input" type="text" placeholder="00000000" required/>
 				</div>
-			</form>
-		</Step>
-		<Step class="ml-5">
-			<svelte:fragment slot="header">{`Time to activate your account! Please check ${registration.email} for the activation code. `}</svelte:fragment>
-			<form name="activate" class="flex h-3/4 justify-center items-middle align-middle">
-				<div class="flex flex-col justify-center items-center">
-					<section class="mt-5 space-y-2">
-						<label class="label">
-							<span>Activation Code</span>
-							<input
-								id="code"
-								bind:value={activation.code}
-								class="input"
-								type="text"
-								placeholder="00000000"
-								required
-							/>
-						</label>
-					</section>
+				<div class="flex space-x-2 justify-end">
+					<button type="submit" class="button-primary mt-5">Activate</button>
 				</div>
-			</form>
-		</Step>
-		<!-- ... -->
-	</Stepper>
+		</form>
+		{/if}
+	<div class="mt-3 max-w-xl mx-auto">
+		Do you have an account? <a href="/login" class="underline">Login Here</a>
+	</div>
 </div>
