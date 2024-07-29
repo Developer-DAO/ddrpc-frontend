@@ -42,7 +42,7 @@
 			<!-- / -->
 			<div class="flex flex-col space-y-4 p-4 justify-center align-center">
 				<p>Come see what sets us apart from the best!</p>
-				<a class="btn variant-filled" href="/dashboard" rel="noreferrer">
+				<a class="btn variant-filled" href="/payments" rel="noreferrer">
 					Get Started
 				</a>
 			</div>
