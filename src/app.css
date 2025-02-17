@@ -1,6 +1,9 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+:root {
+  --background: #18181A;
+}
+
 
 html {
   font-family: 'Poppins', sans-serif;
@@ -8,4 +11,9 @@ html {
 
 h1 {
   font-family: 'Clash Display', serif;
+}
+
+html, body {
+  min-height: 100vh;
+  color: #dddddd;
 }

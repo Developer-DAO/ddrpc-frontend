@@ -9,5 +9,7 @@
 <link href="https://api.fontshare.com/v2/css?f[]=clash-display@700&display=swap" rel="stylesheet">
 </svelte:head>
 
-<Navbar />
-{@render children()}
+<div class="bg-background">
+	<Navbar />
+	{@render children()}
+</div>
