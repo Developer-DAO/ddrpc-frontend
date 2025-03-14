@@ -4,7 +4,19 @@
 	import type { AxiosInstance, AxiosError, AxiosResponse } from 'axios';
 	import axiosDefault from 'axios';
 	import { onMount } from 'svelte';
-	const axios: AxiosInstance = axiosDefault;
+	
+	// Configure axios with proper CORS settings
+	const axios: AxiosInstance = axiosDefault.create({
+		withCredentials: false,
+		timeout: 10000,
+		headers: {
+			'Content-Type': 'application/json',
+			'Accept': 'application/json'
+		}
+	});
+
+	// API base URL
+	const API_BASE_URL = 'http://localhost:3000/api';
 
 	type RegisterUser = {
 		email: string;
@@ -18,9 +30,26 @@
 	};
 
 	let mounted = $state(false);
+	let apiConnected = $state(false);
 
 	onMount(() => {
 		mounted = true;
+		// Test API connection on mount
+		fetch(`${API_BASE_URL}/checkhealth`)
+			.then(response => {
+				if (response.ok) {
+					console.log('API connection successful via fetch');
+					apiConnected = true;
+					formError = '';
+				} else {
+					throw new Error(`API responded with status: ${response.status}`);
+				}
+			})
+			.catch(error => {
+				console.error('API connection failed via fetch:', error);
+				formError = 'Unable to connect to the API server. Please try again later.';
+			});
+			
 		return () => {
 			mounted = false;
 		};
@@ -33,37 +62,98 @@
 		showActivationForm: false
 	});
 
+	let formError = $state('');
+	let isSubmitting = $state(false);
+
 	const register = async (userInfo: RegisterUser): Promise<void> => {
 		console.log('Registering user...', userInfo);
+		if (userInfo.password !== userInfo.passwordConfirmation) {
+			formError = 'Passwords do not match';
+			return;
+		}
+		
+		formError = '';
+		isSubmitting = true;
+		
 		try {
-			const ret: AxiosResponse = await axios.post('http://localhost:3000/api/register', {
+			// Make a copy of the user info to avoid reactivity issues
+			const userData = {
 				email: userInfo.email,
 				password: userInfo.password,
 				wallet: userInfo.wallet
+			};
+			
+			console.log('Sending registration data:', userData);
+			
+			const response = await fetch(`${API_BASE_URL}/register`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json'
+				},
+				body: JSON.stringify(userData)
 			});
-
-			if (ret.status === 200) {
-				console.log('Successfully registered user');
-				showRegisterForm = false;
-				showActivationForm = true;
+			
+			if (!response.ok) {
+				const errorData = await response.text();
+				
+				// Check if the error is because the user is already registered
+				if (errorData.includes('already registered') || response.status === 409) {
+					console.log('User already registered, redirecting to activation page');
+					// Redirect to activation page with email pre-filled
+					window.location.href = `/activate?email=${encodeURIComponent(userInfo.email)}`;
+					return;
+				}
+				
+				throw new Error(errorData || `Server responded with status: ${response.status}`);
 			}
+			
+			const data = await response.json();
+			console.log('Successfully registered user:', data);
+			showRegisterForm = false;
+			showActivationForm = true;
 		} catch (error) {
-			console.error(error as AxiosError);
+			console.error('Registration error:', error);
+			formError = error instanceof Error ? error.message : 'An unknown error occurred during registration';
+		} finally {
+			isSubmitting = false;
 		}
 	};
 
 	const activate = async (activationInfo: ActivationRequest): Promise<void> => {
+		formError = '';
+		isSubmitting = true;
+		
 		try {
-			const ret: AxiosResponse = await axios.post('http://localhost:3000/api/activate', {
+			// Create activation data object
+			const activationData = {
 				email: registerFormValues.email,
 				code: activationInfo.code
+			};
+			
+			console.log('Sending activation data:', activationData);
+			
+			const response = await fetch(`${API_BASE_URL}/activate`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json'
+				},
+				body: JSON.stringify(activationData)
 			});
-
-			if (ret.status === 200) {
-				window.location.href = '/login';
+			
+			if (!response.ok) {
+				const errorData = await response.text();
+				throw new Error(errorData || `Server responded with status: ${response.status}`);
 			}
+			
+			console.log('Successfully activated account');
+			window.location.href = '/login';
 		} catch (error) {
-			console.error(error as AxiosError);
+			console.error('Activation error:', error);
+			formError = error instanceof Error ? error.message : 'An unknown error occurred during activation';
+		} finally {
+			isSubmitting = false;
 		}
 	};
 </script>
@@ -84,6 +174,12 @@
 			</div>
 
 			<div class="container z-50 mx-auto px-5">
+				{#if formError}
+					<div class="bg-red-900/50 border border-red-500 text-red-200 px-4 py-2 rounded-md mb-4 max-w-xl mx-auto">
+						{formError}
+					</div>
+				{/if}
+
 				{#if showRegisterForm}
 					<form
 						class="max-w-xl mx-auto space-y-2"
@@ -135,7 +231,9 @@
 							/>
 						</div>
 						<div class="flex space-x-2 justify-end">
-							<Button type="submit" variant="primary" class="mt-5">Register</Button>
+							<Button type="submit" variant="primary" class="mt-5" disabled={isSubmitting}>
+								{isSubmitting ? 'Registering...' : 'Register'}
+							</Button>
 						</div>
 					</form>
 				{/if}
@@ -159,14 +257,23 @@
 								required
 							/>
 						</div>
+						<p class="text-neutral-400 text-sm">
+							We've sent a verification code to your email. Please check your inbox and enter the code below.
+						</p>
 						<div class="flex space-x-2 justify-end">
-							<Button type="submit" variant="primary" class="mt-5">Activate</Button>
+							<Button type="submit" variant="primary" class="mt-5" disabled={isSubmitting}>
+								{isSubmitting ? 'Activating...' : 'Activate'}
+							</Button>
 						</div>
 					</form>
 				{/if}
 				<div class="mt-3 max-w-xl mx-auto text-center">
 					<span class="text-neutral-500">Do you have an account?</span> 
 					<a href="/login" class="text-primary-white hover:underline">Login Here</a>
+				</div>
+				<div class="mt-1 max-w-xl mx-auto text-center">
+					<span class="text-neutral-500">Already registered but not activated?</span> 
+					<a href="/activate" class="text-primary-white hover:underline">Activate Here</a>
 				</div>
 			</div>
 		</section>
