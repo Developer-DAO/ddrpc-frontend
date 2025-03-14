@@ -108,10 +108,18 @@
 				throw new Error(errorData || `Server responded with status: ${response.status}`);
 			}
 			
-			const data = await response.json();
-			console.log('Successfully registered user:', data);
-			showRegisterForm = false;
-			showActivationForm = true;
+			const contentType = response.headers.get('content-type');
+			if (contentType && contentType.includes('application/json')) {
+				const data = await response.json();
+				console.log('Successfully registered user:', data);
+			} else {
+				// Handle plain text response
+				const text = await response.text();
+				console.log('Successfully registered user:', text);
+			}
+			
+			// Redirect to activation page with email
+			window.location.href = `/activate?email=${encodeURIComponent(userInfo.email)}`;
 		} catch (error) {
 			console.error('Registration error:', error);
 			formError = error instanceof Error ? error.message : 'An unknown error occurred during registration';
