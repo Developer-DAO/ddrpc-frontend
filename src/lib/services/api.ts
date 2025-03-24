@@ -17,16 +17,23 @@ export const apiService = {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                credentials: 'include' // Important for cookies
+                credentials: 'include'
             });
 
             if (!response.ok) {
                 throw new Error(`Failed to fetch API keys: ${response.status}`);
             }
 
-            const keys = await response.json();
-            apiKeys.set(keys);
-            return keys;
+            // Parse the response as JSON
+            const responseData = await response.json();
+            
+            // Map the response format to the simplified ApiKey format
+            const mappedKeys: ApiKey[] = responseData.map((item: { apikey: string }) => ({
+                key: item.apikey
+            }));
+            
+            apiKeys.set(mappedKeys);
+            return mappedKeys;
         } catch (error) {
             console.error('Error fetching API keys:', error);
             return [];
@@ -45,20 +52,26 @@ export const apiService = {
                 },
                 credentials: 'include'
             });
-
+            
             if (!response.ok) {
                 throw new Error(`Failed to generate API key: ${response.status}`);
             }
 
-            const newKey = await response.json();
+            // Get the response as text
+            const keyString = await response.text();
             
-            // Update the store with the new key
-            apiKeys.update(keys => [...keys, newKey]);
+            // Create a simplified ApiKey object
+            const newKey: ApiKey = {
+                key: keyString.trim()
+            };
+            
+            // Refresh the API keys list to get the server-side data
+            await this.fetchApiKeys();
             
             return newKey;
         } catch (error) {
             console.error('Error generating API key:', error);
-            return null;
+            throw error;
         }
     },
 

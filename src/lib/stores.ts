@@ -17,12 +17,9 @@ export const user = writable<User>({
 export const authorized = writable(false);
 
 // Store for API keys
-export type ApiKey = {
-    id: string;
+export interface ApiKey {
+    id?: string;
     key: string;
-    createdAt: string;
-    lastUsed?: string;
-    usageCount: number;
-};
+}
 
 export const apiKeys = writable<ApiKey[]>([]);

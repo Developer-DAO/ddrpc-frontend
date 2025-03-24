@@ -44,8 +44,16 @@
 		
 		try {
 			const newKey = await apiService.generateApiKey();
-			if (!newKey) {
-				throw new Error('Failed to generate API key');
+			
+			// Show success message
+			showCopySuccess = true;
+			setTimeout(() => {
+				showCopySuccess = false;
+			}, 2000);
+			
+			// Copy the new key to clipboard
+			if (newKey) {
+				navigator.clipboard.writeText(newKey.key);
 			}
 		} catch (err) {
 			error = err instanceof Error ? err.message : 'Failed to generate API key';
@@ -126,13 +134,34 @@
 					API keys allow you to access the Developer DAO RPC services. Each key can be used to make requests to the RPC endpoints.
 				</p>
 				<div class="flex justify-end">
-					<Button 
-						variant="primary" 
-						on:click={generateApiKey} 
-						disabled={isGenerating}
+					<button 
+						on:click={async () => {
+							isGenerating = true;
+							error = '';
+							
+							try {
+								const newKey = await apiService.generateApiKey();
+								
+								// Show success message
+								showCopySuccess = true;
+								setTimeout(() => {
+									showCopySuccess = false;
+								}, 2000);
+								
+								// Copy the new key to clipboard
+								if (newKey) {
+									navigator.clipboard.writeText(newKey.key);
+								}
+							} catch (err) {
+								error = err instanceof Error ? err.message : 'Failed to generate API key';
+								console.error('Error generating API key:', err);
+							} finally {
+								isGenerating = false;
+							}
+						}}
 					>
 						{isGenerating ? 'Generating...' : 'Generate New API Key'}
-					</Button>
+					</button>
 				</div>
 			</div>
 			
@@ -143,9 +172,6 @@
 			{:else if $apiKeys.length === 0}
 				<div class="bg-neutral-800/30 border border-neutral-700 rounded-lg p-8 text-center">
 					<p class="text-neutral-400 mb-4">You don't have any API keys yet.</p>
-					<Button variant="primary" on:click={generateApiKey} disabled={isGenerating}>
-						{isGenerating ? 'Generating...' : 'Generate Your First API Key'}
-					</Button>
 				</div>
 			{:else}
 				<div class="bg-neutral-800/30 border border-neutral-700 rounded-lg overflow-hidden">
@@ -153,9 +179,6 @@
 						<thead class="bg-neutral-800">
 							<tr>
 								<th class="px-4 py-3 text-left text-sm font-medium text-neutral-300">API Key</th>
-								<th class="px-4 py-3 text-left text-sm font-medium text-neutral-300">Created</th>
-								<th class="px-4 py-3 text-left text-sm font-medium text-neutral-300">Last Used</th>
-								<th class="px-4 py-3 text-left text-sm font-medium text-neutral-300">Usage</th>
 								<th class="px-4 py-3 text-right text-sm font-medium text-neutral-300">Actions</th>
 							</tr>
 						</thead>
@@ -175,9 +198,6 @@
 											</button>
 										</div>
 									</td>
-									<td class="px-4 py-3 text-sm text-neutral-300">{formatDate(key.createdAt)}</td>
-									<td class="px-4 py-3 text-sm text-neutral-300">{formatDate(key.lastUsed || '')}</td>
-									<td class="px-4 py-3 text-sm text-neutral-300">{key.usageCount || 0} calls</td>
 									<td class="px-4 py-3 text-right">
 										<button 
 											class="text-red-400 hover:text-red-300 transition-colors"
