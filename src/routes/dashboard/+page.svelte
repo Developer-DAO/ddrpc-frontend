@@ -38,12 +38,12 @@
 				</div>
 				
 				<div class="bg-neutral-800/50 border border-neutral-700 rounded-lg p-6 hover:border-neutral-500 transition-colors">
-					<h3 class="font-heading text-xl mb-3">Usage Statistics</h3>
+					<h3 class="font-heading text-xl mb-3">Payments</h3>
 					<p class="text-neutral-400 mb-4">
-						View your RPC usage statistics and billing information.
+						Manage your payment methods and view transaction history.
 					</p>
-					<a href="/dashboard/usage">
-						<Button variant="secondary">View Usage</Button>
+					<a href="/dashboard/payments">
+						<Button variant="secondary">Manage Payments</Button>
 					</a>
 				</div>
 			</div>
