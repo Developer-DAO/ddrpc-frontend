@@ -79,7 +79,7 @@
 		error = '';
 		
 		try {
-			const success = await apiService.deleteApiKey(selectedKeyForDeletion.id);
+			const success = await apiService.deleteApiKey(selectedKeyForDeletion.key);
 			if (!success) {
 				throw new Error('Failed to delete API key');
 			}
@@ -135,30 +135,9 @@
 				</p>
 				<div class="flex justify-end">
 					<button 
-						on:click={async () => {
-							isGenerating = true;
-							error = '';
-							
-							try {
-								const newKey = await apiService.generateApiKey();
-								
-								// Show success message
-								showCopySuccess = true;
-								setTimeout(() => {
-									showCopySuccess = false;
-								}, 2000);
-								
-								// Copy the new key to clipboard
-								if (newKey) {
-									navigator.clipboard.writeText(newKey.key);
-								}
-							} catch (err) {
-								error = err instanceof Error ? err.message : 'Failed to generate API key';
-								console.error('Error generating API key:', err);
-							} finally {
-								isGenerating = false;
-							}
-						}}
+						on:click={generateApiKey}
+						class="bg-primary-white text-neutral-900 px-4 py-2 rounded-full hover:bg-neutral-200 transition-colors disabled:opacity-50"
+						disabled={isGenerating}
 					>
 						{isGenerating ? 'Generating...' : 'Generate New API Key'}
 					</button>
@@ -216,7 +195,10 @@
 			{/if}
 			
 			{#if showDeleteConfirm}
-				<div class="fixed inset-0 bg-black/70 flex items-center justify-center z-50" transition:fade={{ duration: 200 }}>
+				<div 
+					class="fixed inset-0 bg-black/70 flex items-center justify-center z-50" 
+					transition:fade={{ duration: 200 }}
+				>
 					<div class="bg-neutral-800 border border-neutral-700 rounded-lg p-6 max-w-md w-full mx-4" transition:slide={{ duration: 200 }}>
 						<h3 class="font-heading text-xl mb-4">Delete API Key</h3>
 						<p class="text-neutral-300 mb-6">
@@ -228,8 +210,8 @@
 							</div>
 						{/if}
 						<div class="flex justify-end space-x-3">
-							<Button variant="secondary" on:click={cancelDelete}>Cancel</Button>
-							<Button variant="danger" on:click={deleteApiKey}>Delete</Button>
+							<button on:click={cancelDelete}>Cancel</button>
+							<button on:click={deleteApiKey}>Delete</button>
 						</div>
 					</div>
 				</div>

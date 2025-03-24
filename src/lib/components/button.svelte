@@ -10,6 +10,7 @@
 
 <button
   class={styles[variant as keyof typeof styles]}
+  on:click
   {...$$restProps}
 >
   <slot />

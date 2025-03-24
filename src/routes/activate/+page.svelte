@@ -28,28 +28,8 @@
 		if (emailParam) {
 			activationFormValues.email = emailParam;
 		}
-		
-		// Test API connection on mount
-		fetch(`${API_BASE_URL}/checkhealth`)
-			.then(response => {
-				if (response.ok) {
-					console.log('API connection successful via fetch');
-					apiConnected = true;
-					formError = '';
-				} else {
-					throw new Error(`API responded with status: ${response.status}`);
-				}
-			})
-			.catch(error => {
-				console.error('API connection failed via fetch:', error);
-				formError = 'Unable to connect to the API server. Please try again later.';
-			});
-			
-		return () => {
-			mounted = false;
-		};
 	});
-
+	
 	let formError = $state('');
 	let formSuccess = $state('');
 	let isSubmitting = $state(false);

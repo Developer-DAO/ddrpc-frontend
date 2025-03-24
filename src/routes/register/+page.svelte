@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import Button from '$lib/components/button.svelte';
-	import type { AxiosInstance, AxiosError, AxiosResponse } from 'axios';
+	import type { AxiosInstance } from 'axios';
 	import axiosDefault from 'axios';
 	import { onMount } from 'svelte';
 	
@@ -34,25 +34,6 @@
 
 	onMount(() => {
 		mounted = true;
-		// Test API connection on mount
-		fetch(`${API_BASE_URL}/checkhealth`)
-			.then(response => {
-				if (response.ok) {
-					console.log('API connection successful via fetch');
-					apiConnected = true;
-					formError = '';
-				} else {
-					throw new Error(`API responded with status: ${response.status}`);
-				}
-			})
-			.catch(error => {
-				console.error('API connection failed via fetch:', error);
-				formError = 'Unable to connect to the API server. Please try again later.';
-			});
-			
-		return () => {
-			mounted = false;
-		};
 	});
 
 	let { registerFormValues, activationFormValues, showRegisterForm, showActivationForm } = $state({

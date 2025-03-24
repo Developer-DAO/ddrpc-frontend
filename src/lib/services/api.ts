@@ -90,7 +90,7 @@ export const apiService = {
             }
 
             // Update the store by removing the deleted key
-            apiKeys.update(keys => keys.filter(key => key.id !== keyId));
+            apiKeys.update(keys => keys.filter(key => key.key !== keyId));
             
             return true;
         } catch (error) {
