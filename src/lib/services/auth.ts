@@ -29,7 +29,11 @@ export const authService = {
 
             // Check content type to determine how to parse the response
             const contentType = response.headers.get('content-type');
-            let userData = {};
+            let userData: User = {
+                email: '',
+                wallet: '',
+                isAuthenticated: false
+            };
             
             if (contentType && contentType.includes('application/json')) {
                 userData = await response.json();

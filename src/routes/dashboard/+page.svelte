@@ -43,7 +43,7 @@
 						Manage your payment methods and view transaction history.
 					</p>
 					<a href="/dashboard/payments">
-						<Button variant="secondary">Manage Payments</Button>
+						<Button variant="primary">Manage Payments</Button>
 					</a>
 				</div>
 			</div>

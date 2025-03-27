@@ -22,7 +22,6 @@
 		email: string;
 		password: string;
 		passwordConfirmation: string;
-		wallet: string;
 	};
 
 	type ActivationRequest = {
@@ -37,7 +36,7 @@
 	});
 
 	let { registerFormValues, activationFormValues, showRegisterForm, showActivationForm } = $state({
-		registerFormValues: { email: '', password: '', passwordConfirmation: '', wallet: '' },
+		registerFormValues: { email: '', password: '', passwordConfirmation: '' },
 		activationFormValues: { code: '' },
 		showRegisterForm: true,
 		showActivationForm: false
@@ -60,8 +59,7 @@
 			// Make a copy of the user info to avoid reactivity issues
 			const userData = {
 				email: userInfo.email,
-				password: userInfo.password,
-				wallet: userInfo.wallet
+				password: userInfo.password
 			};
 			
 			console.log('Sending registration data:', userData);
@@ -206,16 +204,6 @@
 								class="flex w-full items-center justify-center gap-1 rounded-full border-2 tracking-wider transition-all h-12 px-6 text-sm text-neutral-500 hover:text-primary-white border-neutral-600 hover:border-primary-white bg-neutral-800 hover:bg-neutral-700 font-paragraph font-semibold"
 								type="password"
 								placeholder="Repeat your password"
-								required
-							/>
-						</div>
-						<div class="flex flex-col">
-							<label for="wallet" class="text-neutral-500">Ethereum Wallet</label>
-							<input
-								bind:value={registerFormValues.wallet}
-								class="flex w-full items-center justify-center gap-1 rounded-full border-2 tracking-wider transition-all h-12 px-6 text-sm text-neutral-500 hover:text-primary-white border-neutral-600 hover:border-primary-white bg-neutral-800 hover:bg-neutral-700 font-paragraph font-semibold"
-								type="text"
-								placeholder="0x..."
 								required
 							/>
 						</div>
