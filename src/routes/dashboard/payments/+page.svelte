@@ -84,8 +84,8 @@
 			address: '0x53f3a63f4e5239aefa97390f6334ae41e20a6fb5' as const, 
 			decimals: 18,
 			chain: sepolia,
-			safeConfirmations: 15,  // ~3 minutes
-			timeEstimate: '3 minutes'
+			safeConfirmations: 20,  // ~3 minutes
+			timeEstimate: '5 minutes'
 		}
 	};
 
@@ -500,12 +500,12 @@
 									<div class="mt-4">
 										<div class="flex justify-between text-sm text-neutral-400 mb-1">
 											<span>Block Confirmations ({currentBlock}/{targetBlock})</span>
-											<span>{Math.min(Math.round((currentBlock / targetBlock) * 100), 100)}%</span>
+											<span>{targetBlock ? Math.min(Math.round((currentBlock / targetBlock) * 100), 100) : 0}%</span>
 										</div>
 										<div class="w-full bg-neutral-700 rounded-full h-2">
 											<div
-												class="bg-primary-white h-2 rounded-full transition-all duration-500"
-												style="width: {Math.min((currentBlock / targetBlock) * 100, 100)}%"
+												class="bg-white/50 h-2 rounded-full transition-all duration-500"
+												style="width: {targetBlock ? Math.min(Math.max((currentBlock / targetBlock) * 100, 1), 100) : 1}%"
 											></div>
 										</div>
 										<p class="text-xs text-neutral-400 mt-2">
