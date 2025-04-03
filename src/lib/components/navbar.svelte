@@ -24,7 +24,9 @@
 
 <nav class="relative z-40">
   <div class="container mx-auto py-5 flex justify-between items-center">
-    <a class="font-heading text-2xl uppercase" href="/">D_D RPC</a>
+    <a class="font-heading text-2xl uppercase" href="/">
+      <img src="/logo.png" alt="D_D RPC" class="w-[70px] h-[70px]" />
+    </a>
     
     <div class="flex items-center gap-10">
       <a class="text-xs md:text-sm tracking-wide text-neutral-500 p-0 hover:text-primary-white transition-colors" href="/">

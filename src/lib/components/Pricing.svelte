@@ -10,10 +10,10 @@
       <p class="text-neutral-600">Start building for free, scale as you grow</p>
     </div>
 
-    <div class="col-span-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="col-span-12 flex flex-col lg:flex-row gap-8">
       <!-- Basic Plan -->
-      <Card class="md:col-span-4 p-6 flex-col justify-between">
-        <div>
+      <Card class="flex-1 p-6 flex-col justify-between">
+        <div class="w-full h-full">
           <h3 class="text-xl mb-2 font-heading">Basic</h3>
           <div class="mb-6">
             <span class="text-3xl font-bold">$0</span>
@@ -39,18 +39,18 @@
               <span>Basic support</span>
             </li>
           </ul>
+          <a href="/dashboard/payments">
+            <Button variant="secondary" class="w-full mt-auto">Get Started</Button>
+          </a>
         </div>
-        <a href="https://rpc.developerdao.com/signup">
-          <Button variant="secondary" class="w-full">Get Started</Button>
-        </a>
       </Card>
 
       <!-- Premier Plan -->
-      <Card class="md:col-span-4 p-6 flex-col justify-between">
-        <div class="absolute -right-12 top-6 bg-primary-white text-primary-black px-12 py-1 rotate-45">
-          <span class="text-black">Popular</span>
+      <Card class="flex-1 p-6 flex-col justify-between">
+        <div class="absolute -right-12 top-6 bg-white text-black font-medium px-12 py-1 rotate-45">
+          <span>Popular</span>
         </div>
-        <div>
+        <div class="w-full h-full">
           <h3 class="text-xl mb-2 font-heading">Premier</h3>
           <div class="mb-6">
             <span class="text-3xl font-bold">$99</span>
@@ -82,15 +82,13 @@
               <span>Advanced analytics</span>
             </li>
           </ul>
-        </div>
-        <a href="https://rpc.developerdao.com/signup">
           <Button variant="primary" class="w-full">Get Started</Button>
-        </a>
+        </div>
       </Card>
 
       <!-- Gigachad Plan -->
-      <Card class="md:col-span-4 p-6 flex-col justify-between">
-        <div>
+      <Card class="flex-1 p-6 flex-col justify-between">
+        <div class="w-full h-full">
           <h3 class="text-xl mb-2 font-heading">Gigachad</h3>
           <div class="mb-6">
             <span class="text-3xl font-bold">$499</span>
@@ -134,10 +132,10 @@
               <span>Self-managed infrastructure option (Pay as you go)</span>
             </li>
           </ul>
+          <a href="/dashboard/payments">
+            <Button variant="secondary" class="w-full mt-auto">Contact Sales</Button>
+          </a>
         </div>
-        <a href="https://rpc.developerdao.com/signup">
-          <Button variant="secondary" class="w-full">Contact Sales</Button>
-        </a>
       </Card>
     </div>
   </div>
