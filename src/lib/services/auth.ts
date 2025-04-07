@@ -4,10 +4,39 @@ import { get } from 'svelte/store';
 // API base URL
 const API_BASE_URL = 'http://localhost:3000/api';
 
-/**
- * Authentication service for handling user login, logout, and session management
- */
 export const authService = {
+    /**
+     * Refresh a non-expired JWT with updated information and extend it's expiry
+     */
+    async refresh(): Promise<boolean> {
+        await fetch(`${API_BASE_URL}/refresh`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        })
+            .then(async (res) => {
+                const contentType = res.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const userData: User = await res.json().catch((e) => console.error(`failed to parse JSON: ${e}`));
+                    user.set({
+                        email: userData.email,
+                        wallet: userData.wallet,
+                        isAuthenticated: true
+                    });
+                    authorized.set(true);
+                }
+            })
+            .catch(async (e) => {
+                const errorData = await e.text();
+                throw new Error(errorData || `Refresh failed with status: ${e.status}`);
+            })
+
+         return true;
+    },
+
+
     /**
      * Login a user with email and password
      */
@@ -34,7 +63,7 @@ export const authService = {
                 wallet: '',
                 isAuthenticated: false
             };
-            
+
             if (contentType && contentType.includes('application/json')) {
                 userData = await response.json();
             } else {
@@ -42,7 +71,7 @@ export const authService = {
                 const textResponse = await response.text();
                 console.log('Login successful:', textResponse);
             }
-            
+
             // Update both stores
             user.set({
                 email: userData.email || email,
@@ -50,11 +79,11 @@ export const authService = {
                 isAuthenticated: true
             });
             authorized.set(true);
-            
+
             // Store authentication state in localStorage
             localStorage.setItem('isAuthenticated', 'true');
             localStorage.setItem('userEmail', email);
-            
+
             return true;
         } catch (error) {
             console.error('Login error:', error);
@@ -68,7 +97,7 @@ export const authService = {
     async logout(): Promise<void> {
         try {
             // Call logout endpoint if available
-            await fetch(`${API_BASE_URL}/logout`, {
+            await fetch(`${API_BASE_URL} / logout`, {
                 method: 'POST',
                 credentials: 'include'
             });
@@ -82,7 +111,7 @@ export const authService = {
                 isAuthenticated: false
             });
             authorized.set(false);
-            
+
             // Clear localStorage
             localStorage.removeItem('isAuthenticated');
             localStorage.removeItem('userEmail');
@@ -102,7 +131,7 @@ export const authService = {
     restoreSession(): void {
         const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
         const email = localStorage.getItem('userEmail') || '';
-        
+
         if (isAuthenticated && email) {
             user.set({
                 email,

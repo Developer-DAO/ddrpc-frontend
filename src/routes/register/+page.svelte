@@ -1,19 +1,19 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import Button from '$lib/components/button.svelte';
-	import type { AxiosInstance } from 'axios';
-	import axiosDefault from 'axios';
+	// import type { AxiosInstance } from 'axios';
+	// import axiosDefault from 'axios';
 	import { onMount } from 'svelte';
 	
 	// Configure axios with proper CORS settings
-	const axios: AxiosInstance = axiosDefault.create({
-		withCredentials: false,
-		timeout: 10000,
-		headers: {
-			'Content-Type': 'application/json',
-			'Accept': 'application/json'
-		}
-	});
+	// const axios: AxiosInstance = axiosDefault.create({
+	// 	withCredentials: false,
+	// 	timeout: 10000,
+	// 	headers: {
+	// 		'Content-Type': 'application/json',
+	// 		'Accept': 'application/json'
+	// 	}
+	// });
 
 	// API base URL
 	const API_BASE_URL = 'http://localhost:3000/api';
@@ -29,7 +29,7 @@
 	};
 
 	let mounted = $state(false);
-	let apiConnected = $state(false);
+//	let apiConnected = $state(false);
 
 	onMount(() => {
 		mounted = true;
@@ -171,7 +171,8 @@
 					<form
 						class="max-w-xl mx-auto space-y-2"
 						name="register"
-						on:submit|preventDefault={() => {
+						onsubmit={(e) => {
+                            e.preventDefault();
 							register(registerFormValues);
 						}}
 					>
@@ -219,7 +220,8 @@
 					<form
 						class="max-w-xl mx-auto space-y-2"
 						name="activate"
-						on:submit|preventDefault={() => {
+						onsubmit={(e) => {
+                            e.preventDefault();
 							activate(activationFormValues);
 						}}
 					>

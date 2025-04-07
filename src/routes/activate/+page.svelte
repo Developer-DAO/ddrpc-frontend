@@ -2,7 +2,6 @@
 	import { fade } from 'svelte/transition';
 	import Button from '$lib/components/button.svelte';
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
 	
 	// API base URL
 	const API_BASE_URL = 'http://localhost:3000/api';
@@ -13,7 +12,7 @@
 	};
 
 	let mounted = $state(false);
-	let apiConnected = $state(false);
+//	let apiConnected = $state(false);
 	let activationFormValues = $state({
 		email: '',
 		code: ''
@@ -103,7 +102,8 @@
 				<form
 					class="max-w-xl mx-auto space-y-2"
 					name="activate"
-					on:submit|preventDefault={() => {
+					onsubmit={(e) => {
+                        e.preventDefault();
 						activate(activationFormValues);
 					}}
 				>

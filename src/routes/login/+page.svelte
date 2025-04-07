@@ -73,7 +73,8 @@
 				<form
 					class="max-w-xl mx-auto space-y-2"
 					name="login"
-					on:submit|preventDefault={() => {
+					onsubmit={(e) => {
+                        e.preventDefault();
 						tryLogin(loginFields);
 					}}
 				>

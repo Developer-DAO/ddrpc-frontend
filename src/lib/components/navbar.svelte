@@ -46,7 +46,7 @@
       {#if $user.isAuthenticated}
         <div class="relative">
           <button 
-            on:click={toggleUserMenu}
+            onclick={toggleUserMenu}
             class="flex items-center gap-2 text-sm text-neutral-300 hover:text-primary-white transition-colors py-2 px-4 rounded-full border border-neutral-700 hover:border-neutral-500"
           >
             <span class="hidden sm:inline">{$user.email}</span>
@@ -70,7 +70,7 @@
                 API Keys
               </a>
               <button 
-                on:click={handleLogout}
+                onclick={handleLogout}
                 class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-neutral-700 hover:text-red-300"
               >
                 Sign out
