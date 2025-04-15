@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import Navbar from '$lib/components/navbar.svelte';
+	import ToastContainer from '$lib/components/ToastContainer.svelte';
 	let { children } = $props();
 </script>
 
@@ -12,4 +13,5 @@
 <div class="bg-background">
 	<Navbar />
 	{@render children()}
+	<ToastContainer />
 </div>

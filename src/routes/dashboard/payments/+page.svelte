@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     import { fade } from "svelte/transition";
     import Button from "$lib/components/button.svelte";
+    import { toasts } from "$lib/stores/toast";
     import {
         createWalletClient,
         custom,
@@ -42,8 +43,6 @@
     let manualTxHash = $state("");
     let manualChain = $state<keyof typeof chains>("Optimism");
     let manualSubmitting = $state(false);
-    let retryCount = $state(0);
-    let maxRetries = $state(60); // 5 minutes with 5s intervals
 
     const chainConfirmations = {
         Optimism: 15,
@@ -92,7 +91,7 @@
             timeEstimate: "8 minutes",
         },
         Sepolia: {
-            address: "0x7f5b0d3a719c3a4cd7e9c5863335ac1879c82f28" as const,
+            address: "0x53f3A63f4e5239AeFa97390F6334aE41E20a6fb5" as const,
             decimals: 18,
             chain: sepolia,
             safeConfirmations: 30, // ~3 minutes
@@ -235,7 +234,7 @@
                 );
             }
 
-            // Check user balance
+            // Check user balance with proper formatting
             const balance = await publicClient.readContract({
                 address: tokenAddress,
                 abi: erc20Abi,
@@ -243,9 +242,12 @@
                 args: [address],
             });
 
+            const divisor = 10n ** BigInt(chainConfig.decimals);
+            const formattedBalance = Number(balance.toString()) / Number(divisor.toString());
+
             if (balance < amount) {
                 throw new Error(
-                    `Insufficient USDC balance. You need ${total} USDC but have ${Number(balance) / 10 ** chainConfig.decimals} USDC.`,
+                    `Insufficient USDC balance. You need ${total} USDC but have ${formattedBalance.toFixed(2)} USDC.`,
                 );
             }
 
@@ -314,14 +316,14 @@
                 throw new Error(await planRes.text());
             }
 
-            alert("Payment processed successfully!");
+            toasts.success("Payment processed successfully!");
             await fetchTransactions();
         } catch (error: unknown) {
             console.error("Payment error:", error);
-            alert(
+            toasts.error(
                 error instanceof Error
                     ? error.message
-                    : "An unknown error occurred",
+                    : "An unknown error occurred"
             );
         } finally {
             paymentInProgress = false;
@@ -417,16 +419,16 @@
 
             if (!verifyRes.ok) throw new Error(await verifyRes.text());
 
-            alert("Wallet verified successfully!");
+            toasts.success("Wallet verified successfully!");
             await authService.refresh().catch(() => {
-                alert("Failed to refresh JWT");
+                toasts.error("Failed to refresh JWT");
             });
         } catch (error: unknown) {
             console.error("Wallet verification error:", error);
-            alert(
+            toasts.error(
                 error instanceof Error
                     ? error.message
-                    : "An unknown error occurred",
+                    : "An unknown error occurred"
             );
         }
         verifyingWallet = false;
@@ -434,7 +436,7 @@
 
     async function submitManualTransaction() {
         if (!manualTxHash) {
-            alert("Please enter a transaction hash");
+            toasts.error("Please enter a transaction hash");
             return;
         }
 
@@ -454,15 +456,15 @@
                 throw new Error(await applyRes.text());
             }
 
-            alert("Transaction processed successfully!");
+            toasts.success("Transaction processed successfully!");
             await fetchTransactions();
             manualTxHash = "";
         } catch (error) {
             console.error("Manual submission error:", error);
-            alert(
+            toasts.error(
                 error instanceof Error
                     ? error.message
-                    : "An unknown error occurred",
+                    : "An unknown error occurred"
             );
         } finally {
             manualSubmitting = false;

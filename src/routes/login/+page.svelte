@@ -3,6 +3,7 @@
 	import Button from '$lib/components/button.svelte';
 	import { onMount } from 'svelte';
 	import { authService } from '$lib/services/auth';
+	import { toasts } from '$lib/stores/toast';
 
 	type LoginRequest = {
 		email: string;
@@ -11,7 +12,6 @@
 
 	let mounted = $state(false);
 	let loginFields = $state<LoginRequest>({ email: '', password: '' });
-	let formError = $state('');
 	let isSubmitting = $state(false);
 
 	onMount(() => {
@@ -28,20 +28,20 @@
 	});
 
 	const tryLogin = async (login: LoginRequest): Promise<void> => {
-		formError = '';
 		isSubmitting = true;
 		
 		try {
 			const success = await authService.login(login.email, login.password);
 			
 			if (success) {
+				toasts.success('Login successful! Redirecting to dashboard...');
 				window.location.href = '/dashboard';
 			} else {
-				formError = 'Login failed. Please check your credentials and try again.';
+				toasts.error('Login failed. Please check your credentials and try again.');
 			}
 		} catch (error) {
 			console.error('Login error:', error);
-			formError = error instanceof Error ? error.message : 'An unknown error occurred during login';
+			toasts.error(error instanceof Error ? error.message : 'An unknown error occurred during login');
 		} finally {
 			isSubmitting = false;
 		}
@@ -64,12 +64,6 @@
 			</div>
 
 			<div class="container z-50 mx-auto px-5">
-				{#if formError}
-					<div class="bg-red-900/50 border border-red-500 text-red-200 px-4 py-2 rounded-md mb-4 max-w-xl mx-auto">
-						{formError}
-					</div>
-				{/if}
-
 				<form
 					class="max-w-xl mx-auto space-y-2"
 					name="login"

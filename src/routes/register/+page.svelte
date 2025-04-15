@@ -4,6 +4,7 @@
 	// import type { AxiosInstance } from 'axios';
 	// import axiosDefault from 'axios';
 	import { onMount } from 'svelte';
+	import { toasts } from '$lib/stores/toast';
 	
 	// Configure axios with proper CORS settings
 	// const axios: AxiosInstance = axiosDefault.create({
@@ -48,11 +49,10 @@
 	const register = async (userInfo: RegisterUser): Promise<void> => {
 		console.log('Registering user...', userInfo);
 		if (userInfo.password !== userInfo.passwordConfirmation) {
-			formError = 'Passwords do not match';
+			toasts.error('Passwords do not match');
 			return;
 		}
 		
-		formError = '';
 		isSubmitting = true;
 		
 		try {
@@ -79,6 +79,7 @@
 				// Check if the error is because the user is already registered
 				if (errorData.includes('already registered') || response.status === 409) {
 					console.log('User already registered, redirecting to activation page');
+					toasts.info('Account already exists. Redirecting to activation page...');
 					// Redirect to activation page with email pre-filled
 					window.location.href = `/activate?email=${encodeURIComponent(userInfo.email)}`;
 					return;
@@ -97,18 +98,20 @@
 				console.log('Successfully registered user:', text);
 			}
 			
+			// Show success toast
+			toasts.success('Registration successful! Please check your email for activation code.');
+			
 			// Redirect to activation page with email
 			window.location.href = `/activate?email=${encodeURIComponent(userInfo.email)}`;
 		} catch (error) {
 			console.error('Registration error:', error);
-			formError = error instanceof Error ? error.message : 'An unknown error occurred during registration';
+			toasts.error(error instanceof Error ? error.message : 'An unknown error occurred during registration');
 		} finally {
 			isSubmitting = false;
 		}
 	};
 
 	const activate = async (activationInfo: ActivationRequest): Promise<void> => {
-		formError = '';
 		isSubmitting = true;
 		
 		try {
@@ -135,10 +138,11 @@
 			}
 			
 			console.log('Successfully activated account');
+			toasts.success('Account activated successfully! Please login to continue.');
 			window.location.href = '/login';
 		} catch (error) {
 			console.error('Activation error:', error);
-			formError = error instanceof Error ? error.message : 'An unknown error occurred during activation';
+			toasts.error(error instanceof Error ? error.message : 'An unknown error occurred during activation');
 		} finally {
 			isSubmitting = false;
 		}

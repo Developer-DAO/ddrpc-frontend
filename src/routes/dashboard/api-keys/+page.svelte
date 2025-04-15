@@ -4,6 +4,7 @@
 	import Button from '$lib/components/button.svelte';
 	import { apiService } from '$lib/services/api';
 	import { apiKeys, type ApiKey } from '$lib/stores';
+	import { toasts } from '$lib/stores/toast';
 	
 	let mounted = $state(false);
 	let isLoading = $state(true);
@@ -31,7 +32,7 @@
 		try {
 			await apiService.fetchApiKeys();
 		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to load API keys';
+			toasts.error(err instanceof Error ? err.message : 'Failed to load API keys');
 			console.error('Error loading API keys:', err);
 		} finally {
 			isLoading = false;
@@ -45,18 +46,13 @@
 		try {
 			const newKey = await apiService.generateApiKey();
 			
-			// Show success message
-			showCopySuccess = true;
-			setTimeout(() => {
-				showCopySuccess = false;
-			}, 2000);
-			
-			// Copy the new key to clipboard
+			// Copy the new key to clipboard and show toast
 			if (newKey) {
 				navigator.clipboard.writeText(newKey.key);
+				toasts.success('API key generated and copied to clipboard!');
 			}
 		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to generate API key';
+			toasts.error(err instanceof Error ? err.message : 'Failed to generate API key');
 			console.error('Error generating API key:', err);
 		} finally {
 			isGenerating = false;
@@ -85,18 +81,16 @@
 			}
 			showDeleteConfirm = false;
 			selectedKeyForDeletion = null;
+			toasts.success('API key deleted successfully');
 		} catch (err) {
-			error = err instanceof Error ? err.message : 'Failed to delete API key';
+			toasts.error(err instanceof Error ? err.message : 'Failed to delete API key');
 			console.error('Error deleting API key:', err);
 		}
 	}
 	
 	function copyToClipboard(text: string) {
 		navigator.clipboard.writeText(text).then(() => {
-			showCopySuccess = true;
-			setTimeout(() => {
-				showCopySuccess = false;
-			}, 2000);
+			toasts.info('API key copied to clipboard');
 		});
 	}
 	
@@ -199,19 +193,22 @@
 					class="fixed inset-0 bg-black/70 flex items-center justify-center z-50" 
 					transition:fade={{ duration: 200 }}
 				>
-					<div class="bg-neutral-800 border border-neutral-700 rounded-lg p-6 max-w-md w-full mx-4" transition:slide={{ duration: 200 }}>
-						<h3 class="font-heading text-xl mb-4">Delete API Key</h3>
-						<p class="text-neutral-300 mb-6">
-							Are you sure you want to delete this API key? This action cannot be undone and any applications using this key will no longer work.
-						</p>
-						{#if selectedKeyForDeletion}
-							<div class="bg-neutral-900 p-3 rounded mb-6 font-mono text-sm overflow-x-auto">
-								{selectedKeyForDeletion.key}
-							</div>
-						{/if}
+					<div class="bg-neutral-800 rounded-lg p-6 max-w-md mx-4 w-full" transition:slide={{ duration: 200 }}>
+						<h3 class="text-xl mb-4">Delete API Key?</h3>
+						<p class="text-neutral-300 mb-6">Are you sure you want to delete this API key? This action cannot be undone.</p>
 						<div class="flex justify-end space-x-3">
-							<button onclick={cancelDelete}>Cancel</button>
-							<button onclick={deleteApiKey}>Delete</button>
+							<button 
+								class="px-4 py-2 rounded-full bg-neutral-700 text-neutral-300 hover:bg-neutral-600 transition-colors"
+								onclick={cancelDelete}
+							>
+								Cancel
+							</button>
+							<button 
+								class="px-4 py-2 rounded-full bg-red-700 text-white hover:bg-red-600 transition-colors"
+								onclick={deleteApiKey}
+							>
+								Delete
+							</button>
 						</div>
 					</div>
 				</div>
