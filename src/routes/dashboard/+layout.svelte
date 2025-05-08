@@ -2,21 +2,30 @@
 	import { onMount } from 'svelte';
 	import { authService } from '$lib/services/auth';
 	import { fade } from 'svelte/transition';
+	import { goto } from '$app/navigation';
 	
 	let { children } = $props();
 	let isLoading = $state(true);
 	let isAuthenticated = $state(false);
 	
-	onMount(() => {
-		// Check if user is authenticated
-		isAuthenticated = authService.isAuthenticated();
-		
-		// If not authenticated, redirect to login
-		if (!isAuthenticated) {
-			window.location.href = '/login';
+	onMount(async () => {
+		try {
+			// First try to restore session from cookies/localStorage
+			const sessionRestored = await authService.restoreSession();
+			
+			// Check if user is authenticated after session restore
+			isAuthenticated = sessionRestored || authService.isAuthenticated();
+			
+			// If not authenticated, redirect to login
+			if (!isAuthenticated) {
+				goto('/login');
+			}
+		} catch (error) {
+			console.error('Authentication error:', error);
+			goto('/login');
+		} finally {
+			isLoading = false;
 		}
-		
-		isLoading = false;
 	});
 </script>
 

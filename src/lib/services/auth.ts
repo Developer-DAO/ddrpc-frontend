@@ -16,39 +16,39 @@ export const authService = {
      * Refresh a non-expired JWT with updated information and extend it's expiry
      */
     async refresh(): Promise<boolean> {
-        await fetch(`${API_BASE_URL}/refresh`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-        })
-            .then(async (res) => {
-                const contentType = res.headers.get('content-type');
-                if (contentType && contentType.includes('application/json')) {
-                    const userData: User = await res.json().catch((e) => console.error(`failed to parse JSON: ${e}`));
-                    user.set({
-                        email: userData.email,
-                        wallet: userData.wallet,
-                        isAuthenticated: true
-                    });
-                    authorized.set(true);
-                }
-            })
-            .catch(async (e) => {
-                const errorData = await e.text();
-                throw new Error(errorData || `Refresh failed with status: ${e.status}`);
-            })
+        try {
+            const response = await fetch(`${API_BASE_URL}/refresh`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Refresh failed with status: ${response.status}`);
+            }
 
-         return true;
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const userData: User = await response.json();
+                this.updateAuthState(userData.email, userData.wallet);
+                return true;
+            }
+            return false;
+        } catch (error) {
+            console.error('Refresh error:', error);
+            return false;
+        }
     },
-
 
     /**
      * Login a user with email and password
      */
     async login(email: string, password: string): Promise<boolean> {
         try {
+            document.cookie = "jwt=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            
             const response = await fetch(`${API_BASE_URL}/login`, {
                 method: 'POST',
                 headers: {
@@ -63,34 +63,8 @@ export const authService = {
                 throw new Error(errorData || `Login failed with status: ${response.status}`);
             }
 
-            // Check content type to determine how to parse the response
-            const contentType = response.headers.get('content-type');
-            let userData: User = {
-                email: '',
-                wallet: '',
-                isAuthenticated: false
-            };
-
-            if (contentType && contentType.includes('application/json')) {
-                userData = await response.json();
-            } else {
-                // Handle text response - just log it and continue
-                const textResponse = await response.text();
-                console.log('Login successful:', textResponse);
-            }
-
-            // Update both stores
-            user.set({
-                email: userData.email || email,
-                wallet: userData.wallet || '',
-                isAuthenticated: true
-            });
-            authorized.set(true);
-
-            // Store authentication state in localStorage
-            localStorage.setItem('isAuthenticated', 'true');
-            localStorage.setItem('userEmail', email);
-
+            // Handle successful login
+            this.updateAuthState(email);
             return true;
         } catch (error) {
             console.error('Login error:', error);
@@ -103,12 +77,10 @@ export const authService = {
      */
     async loginWithWallet(walletAddress: string, ethereum: EthereumProvider): Promise<boolean> {
         try {
-            // Ensure the address is in proper EIP-55 checksum format
             const checksummedWallet = getAddress(walletAddress);
             
-            const nonceResponse = await fetch(`${API_BASE_URL}/siwe/nonce/${checksummedWallet}`, {
-                credentials: 'include' // Include credentials for JWT auth
-            });
+            const nonceResponse = await fetch(`${API_BASE_URL}/siwe/nonce/${checksummedWallet}`);
+            
             if (!nonceResponse.ok) {
                 const errorText = await nonceResponse.text();
                 throw new Error(errorText || `Failed to get nonce with status: ${nonceResponse.status}`);
@@ -168,18 +140,16 @@ export const authService = {
                 credentials: 'include'
             });
             
-
             if (!loginResponse.ok) {
                 const errorData = await loginResponse.text().catch(() => null);
                 console.error('Server error response:', errorData);
                 throw new Error(errorData || `Wallet login failed with status: ${loginResponse.status}`);
             }
             
-
-            localStorage.setItem('userEmail', await loginResponse.text());
-            localStorage.setItem('isAuthenticated', 'true');
-            authorized.set(true);
-                
+            // Get the email from the response if available
+            const email = await loginResponse.text();
+            this.updateAuthState(email, checksummedWallet);
+            
             return true;
         } catch (error) {
             console.error('Wallet login error:', error);
@@ -188,11 +158,26 @@ export const authService = {
     },
 
     /**
+     * Update authentication state consistently across all methods
+     */
+    updateAuthState(email = '', wallet = ''): void {
+        user.set({
+            email,
+            wallet,
+            isAuthenticated: true
+        });
+        authorized.set(true);
+
+        localStorage.setItem('isAuthenticated', 'true');
+        if (email) localStorage.setItem('userEmail', email);
+        if (wallet) localStorage.setItem('userWallet', wallet);
+    },
+
+    /**
      * Logout the current user
      */
     async logout(): Promise<void> {
         try {
-            // Call logout endpoint if available
             await fetch(`${API_BASE_URL}/logout`, {
                 method: 'POST',
                 credentials: 'include'
@@ -200,7 +185,6 @@ export const authService = {
         } catch (error) {
             console.error('Logout error:', error);
         } finally {
-            // Clear authentication state regardless of API success
             user.set({
                 email: '',
                 wallet: '',
@@ -208,9 +192,9 @@ export const authService = {
             });
             authorized.set(false);
 
-            // Clear localStorage
             localStorage.removeItem('isAuthenticated');
             localStorage.removeItem('userEmail');
+            localStorage.removeItem('userWallet');
         }
     },
 
@@ -218,23 +202,46 @@ export const authService = {
      * Check if the user is authenticated
      */
     isAuthenticated(): boolean {
-        return get(user).isAuthenticated || localStorage.getItem('isAuthenticated') === 'true';
+        const cookies = document.cookie.split(';').map(c => c.trim());
+        const jwtCookies = cookies.filter(c => c.startsWith('jwt='));
+            
+        if (jwtCookies.length > 0) {
+            if (jwtCookies.length > 1) {
+                console.warn('Multiple JWT cookies found:', jwtCookies);
+            }
+            return true;
+        }
+        
+        if (get(user).isAuthenticated || get(authorized)) {
+            return true;
+        }
+        
+        return localStorage.getItem('isAuthenticated') === 'true';
     },
 
     /**
-     * Restore user session from localStorage or cookies
+     * Restore user session from cookies or localStorage
      */
-    restoreSession(): void {
+    async restoreSession(): Promise<boolean> {
+        const refreshResult = await this.refresh();
+        if (refreshResult) {
+            return true;
+        }
+        
         const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
         const email = localStorage.getItem('userEmail') || '';
+        const wallet = localStorage.getItem('userWallet') || '';
 
-        if (isAuthenticated && email) {
+        if (isAuthenticated && (email || wallet)) {
             user.set({
                 email,
-                wallet: '',
+                wallet,
                 isAuthenticated: true
             });
             authorized.set(true);
+            return true;
         }
+        
+        return false;
     }
 }; 

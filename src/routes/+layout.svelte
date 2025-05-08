@@ -1,8 +1,16 @@
 <script lang="ts">
 	import '../app.css';
+	import { onMount } from 'svelte';
+	import { authService } from '$lib/services/auth';
 	import Navbar from '$lib/components/navbar.svelte';
 	import ToastContainer from '$lib/components/ToastContainer.svelte';
+	
 	let { children } = $props();
+	
+	onMount(async () => {
+		// Attempt to restore the session on app initialization
+		await authService.restoreSession();
+	});
 </script>
 
 <svelte:head>

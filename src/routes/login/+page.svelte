@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { authService } from '$lib/services/auth';
 	import { toasts } from '$lib/stores/toast';
+	import { goto } from '$app/navigation';
 
 	const API_BASE_URL = 'http://localhost:3000/api';
 
@@ -24,13 +25,27 @@
 		request: (args: {method: string; params?: unknown[]}) => Promise<unknown>;
 	};
 
+	// Separate the init logic from onMount
+	async function initAuth() {
+		// Check if already authenticated
+		const isAuth = authService.isAuthenticated();
+		if (isAuth) {
+			goto('/dashboard');
+			return;
+		}
+		
+		// Attempt to restore session
+		const sessionRestored = await authService.restoreSession();
+		if (sessionRestored) {
+			goto('/dashboard');
+		}
+	}
+
 	onMount(() => {
 		mounted = true;
 		
-		// If already authenticated, redirect to dashboard
-		if (authService.isAuthenticated()) {
-			window.location.href = '/dashboard';
-		}
+		// Run the auth init
+		initAuth();
 		
 		return () => {
 			mounted = false;
@@ -45,7 +60,7 @@
 			
 			if (success) {
 				toasts.success('Login successful! Redirecting to dashboard...');
-				window.location.href = '/dashboard';
+				goto('/dashboard');
 			} else {
 				toasts.error('Login failed. Please check your credentials and try again.');
 			}
@@ -94,7 +109,7 @@
 			
 			if (success) {
 				toasts.success('Wallet login successful! Redirecting to dashboard...');
-				window.location.href = '/dashboard';
+				goto('/dashboard');
 			} else {
 				toasts.error('Wallet login failed. Make sure your wallet is linked to your account.');
 			}
