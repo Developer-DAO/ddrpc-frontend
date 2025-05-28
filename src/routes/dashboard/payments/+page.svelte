@@ -12,7 +12,7 @@
         createPublicClient,
         //        type WalletClient,
         type PublicClient,
-        type Address,
+        type Hash,
     } from "viem";
     import { createSiweMessage } from "viem/siwe";
     import { optimism, arbitrum, base, polygon, sepolia } from "viem/chains";
@@ -180,7 +180,7 @@
 
     async function waitForReceipt(
         publicClient: PublicClient,
-        hash: Address,
+        hash: Hash,
         maxAttempts = 30,
     ) {
         for (let i = 0; i < maxAttempts; i++) {
@@ -191,7 +191,7 @@
                 if (receipt && receipt.blockNumber) {
                     return receipt;
                 }
-            } catch (error) {
+            } catch {
                 console.log("Waiting for transaction to be finalized...");
             }
             await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait 2 seconds between attempts
