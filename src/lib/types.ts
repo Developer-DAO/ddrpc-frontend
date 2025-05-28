@@ -1,3 +1,4 @@
+
 export interface PaymentMethod {
 	id: string;
 	type: 'card' | 'crypto';
@@ -15,3 +16,13 @@ export interface Transaction {
 	description: string;
 	paymentMethodId: string;
 } 
+
+export interface EthWindow extends Window {
+    ethereum?: EthereumProvider;
+}
+
+export type EthereumProvider = {
+	request: (args: {method: string; params?: unknown[]}) => Promise<unknown>;
+};
+
+

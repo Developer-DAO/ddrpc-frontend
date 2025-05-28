@@ -8,14 +8,16 @@
         createWalletClient,
         custom,
         parseUnits,
-        getContract,
+        //        getContract,
         createPublicClient,
-        http,
+        //        type WalletClient,
+        type PublicClient,
         type Address,
     } from "viem";
     import { createSiweMessage } from "viem/siwe";
     import { optimism, arbitrum, base, polygon, sepolia } from "viem/chains";
-    import { preventDefault } from "svelte/legacy";
+    import type { EthWindow } from "$lib/types";
+    //    import { preventDefault } from "svelte/legacy";
 
     interface Transaction {
         customeremail: string;
@@ -44,13 +46,13 @@
     let manualChain = $state<keyof typeof chains>("Optimism");
     let manualSubmitting = $state(false);
 
-    const chainConfirmations = {
-        Optimism: 15,
-        Base: 15,
-        Arbitrum: 15,
-        Polygon: 256,
-        Sepolia: 15,
-    } as const;
+    // const chainConfirmations = {
+    //     Optimism: 15,
+    //     Base: 15,
+    //     Arbitrum: 15,
+    //     Polygon: 256,
+    //     Sepolia: 15,
+    // } as const;
 
     const plans = {
         tier1: { name: "Tier 1", price: 50, requests: "30M" },
@@ -127,13 +129,15 @@
         return planPrice * selectedDuration;
     }
 
-    async function trackConfirmations(publicClient: any, txBlock: bigint) {
+    async function trackConfirmations(
+        publicClient: PublicClient,
+        txBlock: bigint,
+    ) {
         const chainConfig = chains[selectedChain];
         const required = chainConfig.safeConfirmations;
         targetBlock = required;
         let attempts = 0;
         const maxAttempts = Math.max(180, required * 2); // At least 3 minutes or 2x required blocks
-
         while (attempts < maxAttempts) {
             try {
                 // Get both latest and safe block
@@ -175,8 +179,8 @@
     }
 
     async function waitForReceipt(
-        publicClient: any,
-        hash: string,
+        publicClient: PublicClient,
+        hash: Address,
         maxAttempts = 30,
     ) {
         for (let i = 0; i < maxAttempts; i++) {
@@ -208,7 +212,7 @@
             // Create wallet client
             const walletClient = createWalletClient({
                 chain: chainConfig.chain,
-                transport: custom((window as any).ethereum),
+                transport: custom((window as EthWindow).ethereum!),
             });
 
             // Get address
@@ -217,7 +221,7 @@
             // Create public client
             const publicClient = createPublicClient({
                 chain: chainConfig.chain,
-                transport: custom((window as any).ethereum),
+                transport: custom((window as EthWindow).ethereum!),
             });
 
             // Calculate amount based on plan and duration
@@ -243,7 +247,8 @@
             });
 
             const divisor = 10n ** BigInt(chainConfig.decimals);
-            const formattedBalance = Number(balance.toString()) / Number(divisor.toString());
+            const formattedBalance =
+                Number(balance.toString()) / Number(divisor.toString());
 
             if (balance < amount) {
                 throw new Error(
@@ -265,7 +270,10 @@
             waitingForConfirmations = true;
 
             // Wait for transaction to be mined and get initial receipt
-            const initialReceipt = await waitForReceipt(publicClient, hash);
+            const initialReceipt = await waitForReceipt(
+                publicClient as PublicClient,
+                hash,
+            );
             console.log(
                 "Transaction mined in block:",
                 initialReceipt.blockNumber,
@@ -273,7 +281,7 @@
 
             // Start tracking confirmations until we reach a safe block
             const isSafe = await trackConfirmations(
-                publicClient,
+                publicClient as PublicClient,
                 initialReceipt.blockNumber,
             );
 
@@ -323,7 +331,7 @@
             toasts.error(
                 error instanceof Error
                     ? error.message
-                    : "An unknown error occurred"
+                    : "An unknown error occurred",
             );
         } finally {
             paymentInProgress = false;
@@ -355,7 +363,7 @@
         try {
             // Get wallet client
             const walletClient = createWalletClient({
-                transport: custom((window as any).ethereum),
+                transport: custom((window as EthWindow).ethereum!),
             });
 
             // Get address
@@ -363,11 +371,11 @@
 
             // Get nonce from backend
             const nonceRes = await fetch(
-                "http://localhost:3000/api/siwe/nonce",
+                `http://localhost:3000/api/siwe/nonce/jwt`,
                 {
-                    method: "GET",
-                    credentials: "include",
-                },
+                    method: 'GET',
+                    credentials: "include"
+                }
             );
 
             if (!nonceRes.ok)
@@ -428,7 +436,7 @@
             toasts.error(
                 error instanceof Error
                     ? error.message
-                    : "An unknown error occurred"
+                    : "An unknown error occurred",
             );
         }
         verifyingWallet = false;
@@ -464,7 +472,7 @@
             toasts.error(
                 error instanceof Error
                     ? error.message
-                    : "An unknown error occurred"
+                    : "An unknown error occurred",
             );
         } finally {
             manualSubmitting = false;
@@ -792,4 +800,3 @@
         </div>
     {/if}
 {/key}
-
