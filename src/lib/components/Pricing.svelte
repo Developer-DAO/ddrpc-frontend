@@ -16,7 +16,7 @@
         <div class="w-full h-full">
           <h3 class="text-xl mb-2 font-heading">Basic</h3>
           <div class="mb-6">
-            <span class="text-3xl font-bold">$0</span>
+            <span class="text-3xl font-bold">$40</span>
             <span class="text-neutral-600">/month</span>
           </div>
           <ul class="space-y-3 mb-6">
@@ -24,13 +24,7 @@
               <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
                 <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
               </svg>
-              <span>100K requests/day</span>
-            </li>
-            <li class="flex items-center">
-              <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
-              </svg>
-              <span>3 networks</span>
+              <span>5M requests/month</span>
             </li>
             <li class="flex items-center">
               <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
@@ -53,7 +47,7 @@
         <div class="w-full h-full">
           <h3 class="text-xl mb-2 font-heading">Premier</h3>
           <div class="mb-6">
-            <span class="text-3xl font-bold">$99</span>
+            <span class="text-3xl font-bold">$200</span>
             <span class="text-neutral-600">/month</span>
           </div>
           <ul class="space-y-3 mb-6">
@@ -61,25 +55,13 @@
               <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
                 <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
               </svg>
-              <span>1M requests/day</span>
-            </li>
-            <li class="flex items-center">
-              <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
-              </svg>
-              <span>All networks</span>
+              <span>30M requests/month</span>
             </li>
             <li class="flex items-center">
               <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
                 <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
               </svg>
               <span>Priority support</span>
-            </li>
-            <li class="flex items-center">
-              <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
-              </svg>
-              <span>Advanced analytics</span>
             </li>
           </ul>
           <Button variant="primary" class="w-full">Get Started</Button>
@@ -91,7 +73,7 @@
         <div class="w-full h-full">
           <h3 class="text-xl mb-2 font-heading">Gigachad</h3>
           <div class="mb-6">
-            <span class="text-3xl font-bold">$499</span>
+            <span class="text-3xl font-bold">$850</span>
             <span class="text-neutral-600">/month</span>
           </div>
           <ul class="space-y-3 mb-6">
@@ -99,37 +81,13 @@
               <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
                 <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
               </svg>
-              <span>Unlimited requests</span>
+              <span>150M Requests/month</span>
             </li>
             <li class="flex items-center">
               <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
                 <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
               </svg>
-              <span>All networks</span>
-            </li>
-            <li class="flex items-center">
-              <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
-              </svg>
-              <span>24/7 dedicated support</span>
-            </li>
-            <li class="flex items-center">
-              <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
-              </svg>
-              <span>Custom analytics</span>
-            </li>
-            <li class="flex items-center">
-              <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
-              </svg>
-              <span>SLA guarantee</span>
-            </li>
-            <li class="flex items-center">
-              <svg class="h-5 w-5 mr-2" viewBox="0 0 24 24">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
-              </svg>
-              <span>Self-managed infrastructure option (Pay as you go)</span>
+              <span>Priority support</span>
             </li>
           </ul>
           <a href="/dashboard/payments">

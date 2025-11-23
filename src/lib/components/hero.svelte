@@ -47,20 +47,20 @@
       </div>
 
       <p class="font-paragraph font-normal mb-6 px-10 md:px-0 text-neutral-600">
-        Lightning-fast, reliable RPC infrastructure built by developers, for developers
+        Lightning-fast, reliable infrastructure by Futex Labs 
       </p>
 
       <div class="flex flex-col gap-4 md:flex-row">
-        <a href="https://app.deform.cc/form/ceae30a6-0345-4000-8acb-9e0021c6fc72/?page_number=0" target="_blank">
+        <a href="/login" target="_blank">
           <Button variant="primary">
             <svg class="h-5 w-5" viewBox="0 0 24 24">
               <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="currentColor"/>
             </svg>
-            Join the waitlist
+            <a href="/login">Login</a>
           </Button>
         </a>
 
-        <a href="#">
+        <a href="https://developer-dao.github.io/Cloud-Docs/intro.html">
           <Button variant="secondary">
             Documentation
           </Button>

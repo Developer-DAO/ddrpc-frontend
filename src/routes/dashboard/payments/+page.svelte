@@ -55,9 +55,9 @@
     // } as const;
 
     const plans = {
-        tier1: { name: "Tier 1", price: 50, requests: "30M" },
-        tier2: { name: "Tier 2", price: 200, requests: "125M" },
-        tier3: { name: "Tier 3", price: 875, requests: "500M" },
+        tier1: { name: "Tier 1", price: 40, requests: "5M" },
+        tier2: { name: "Tier 2", price: 200, requests: "30M" },
+        tier3: { name: "Tier 3", price: 850, requests: "150M" },
     };
 
     const RECIPIENT_ADDRESS =
@@ -373,9 +373,9 @@
             const nonceRes = await fetch(
                 `http://localhost:3000/api/siwe/nonce/jwt`,
                 {
-                    method: 'GET',
-                    credentials: "include"
-                }
+                    method: "GET",
+                    credentials: "include",
+                },
             );
 
             if (!nonceRes.ok)
@@ -502,7 +502,7 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                         {#each Object.entries(plans) as [id, plan]}
-                            <div
+                            <button
                                 class="border rounded-lg p-4 cursor-pointer transition-all {selectedPlan ===
                                 id
                                     ? 'border-primary-white bg-neutral-700/50'
@@ -519,7 +519,7 @@
                                 <p class="text-neutral-400">
                                     {plan.requests} requests/month
                                 </p>
-                            </div>
+                            </button>
                         {/each}
                     </div>
 
@@ -529,7 +529,7 @@
                         </h3>
                         <div class="grid grid-cols-4 gap-4">
                             {#each durations as duration}
-                                <div
+                                <button
                                     class="border rounded-lg p-4 text-center cursor-pointer transition-all {selectedDuration ===
                                     duration
                                         ? 'border-primary-white bg-neutral-700/50'
@@ -541,7 +541,7 @@
                                         {duration}
                                         {duration === 1 ? "Month" : "Months"}
                                     </p>
-                                </div>
+                                </button>
                             {/each}
                         </div>
                     </div>
@@ -552,7 +552,7 @@
                         </h3>
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             {#each Object.entries(chains) as [id, chain]}
-                                <div
+                                <button
                                     class="border rounded-lg p-4 cursor-pointer transition-all {selectedChain ===
                                     id
                                         ? 'border-primary-white bg-neutral-700/50'
@@ -568,7 +568,7 @@
                                             >~{chain.timeEstimate} for finality</span
                                         >
                                     </p>
-                                </div>
+                                </button>
                             {/each}
                         </div>
                     </div>
@@ -672,7 +672,7 @@
                         }}
                     >
                         <div>
-                            <label class="block text-sm text-neutral-400 mb-2"
+                            <label for="transaction-hash" class="block text-sm text-neutral-400 mb-2"
                                 >Transaction Hash</label
                             >
                             <input
@@ -684,7 +684,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm text-neutral-400 mb-2"
+                            <label for="network" class="block text-sm text-neutral-400 mb-2"
                                 >Network</label
                             >
                             <select

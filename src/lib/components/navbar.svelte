@@ -29,12 +29,14 @@
     </a>
     
     <div class="flex items-center gap-10">
-      <a class="text-xs md:text-sm tracking-wide text-neutral-500 p-0 hover:text-primary-white transition-colors" href="/">
-        Home
-      </a>
-      <a class="text-xs md:text-sm tracking-wide text-neutral-500 p-0 hover:text-primary-white transition-colors" href="/features">
-        Features
-      </a>
+      <!-- <a class="text-xs md:text-sm tracking-wide text-neutral-500 p-0 hover:text-primary-white transition-colors" href="/"> -->
+      <!--   Home -->
+      <!-- </a> -->
+      <!-- <a class="text-xs md:text-sm tracking-wide text-neutral-500 p-0 hover:text-primary-white transition-colors" href="/features"> -->
+      <!--   Features -->
+      <!-- </a> -->
+      
+      <a class="text-xs md:text-sm tracking-wide text-neutral-500 p-0 hover:text-primary-white transition-colors" href="https://developer-dao.github.io/Cloud-Docs/intro.html">Docs</a>
       {#if $user.isAuthenticated}
         <a class="text-xs md:text-sm tracking-wide text-neutral-500 p-0 hover:text-primary-white transition-colors" href="/dashboard">
           Dashboard
