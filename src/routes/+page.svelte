@@ -3,7 +3,7 @@
   import Features from '$lib/components/Features.svelte';
   import Stats from '$lib/components/Stats.svelte';
   import Pricing from '$lib/components/Pricing.svelte';
-  import Testimonials from '$lib/components/Testimonials.svelte';
+//  import Testimonials from '$lib/components/Testimonials.svelte';
   import CTA from '$lib/components/CTA.svelte';
 </script>
 
@@ -13,7 +13,7 @@
     <Features />
     <Stats />
     <Pricing />
-    <Testimonials />
+<!-- <Testimonials /> -->
     <CTA />
   </div>
 </article>
