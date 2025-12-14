@@ -6,10 +6,6 @@
         <p class="text-neutral-600">Uptime</p>
       </div>
       <div>
-        <h2 class="font-heading text-4xl">&lt;100ms</h2>
-        <p class="text-neutral-600">Latency</p>
-      </div>
-      <div>
         <h2 class="font-heading text-4xl">10+</h2>
         <p class="text-neutral-600">Networks</p>
       </div>

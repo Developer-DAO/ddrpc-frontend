@@ -33,9 +33,9 @@
               <span>Basic support</span>
             </li>
           </ul>
-          <a href="/dashboard/payments">
-            <Button variant="secondary" class="w-full mt-auto">Get Started</Button>
-          </a>
+          <!-- <a href="/dashboard/payments"> -->
+          <!--   <Button variant="secondary" class="w-full mt-auto">Get Started</Button> -->
+          <!-- </a> -->
         </div>
       </Card>
 
@@ -64,7 +64,9 @@
               <span>Priority support</span>
             </li>
           </ul>
-          <Button variant="primary" class="w-full">Get Started</Button>
+          <!-- <Button variant="primary" class="w-full"> -->
+          <!--   Get Started -->
+          <!-- </Button> -->
         </div>
       </Card>
 
@@ -90,9 +92,9 @@
               <span>Priority support</span>
             </li>
           </ul>
-          <a href="/dashboard/payments">
-            <Button variant="secondary" class="w-full mt-auto">Contact Sales</Button>
-          </a>
+          <!-- <a href="/dashboard/payments"> -->
+          <!--   <Button variant="secondary" class="w-full mt-auto">Contact Sales</Button> -->
+          <!-- </a> -->
         </div>
       </Card>
     </div>
