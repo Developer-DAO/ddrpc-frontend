@@ -7,8 +7,6 @@
     import { goto } from "$app/navigation";
     import { type EthWindow, type EthereumProvider } from "$lib/types";
 
-    //	const API_BASE_URL = 'http://localhost:3000/api';
-
     type LoginRequest = {
         email: string;
         password: string;

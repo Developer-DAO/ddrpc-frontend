@@ -56,7 +56,7 @@
 				<ol class="list-decimal list-inside space-y-2 text-neutral-300">
 					<li>Create an API key in the <a href="/dashboard/api-keys" class="text-primary-white hover:underline">API Keys</a> section</li>
 					<li>Use your API key in your requests to the RPC endpoint</li>
-					<li>Format your requests as: <code class="bg-neutral-900 px-2 py-1 rounded">http://localhost:3000/rpc/&#123;chain&#125;/&#123;api_key&#125;</code></li>
+					<li>Format your requests as: <code class="bg-neutral-900 px-2 py-1 rounded">http://api.cloud.developerdao.com/rpc/&#123;chain_id&#125;/&#123;api_key&#125;</code></li>
 				</ol>
 			</div>
 		</div>

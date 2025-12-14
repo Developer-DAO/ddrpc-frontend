@@ -2,7 +2,7 @@ import { user, authorized, type User } from '$lib/stores';
 import { get } from 'svelte/store';
 
 // API base URL
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'https://api.cloud.developerdao.com/api';
 
 import { createSiweMessage } from 'viem/siwe';
 import { getAddress } from 'viem';
@@ -98,8 +98,8 @@ export const authService = {
             
             console.log('Got nonce:', nonce);
             
-            const domain = "localhost:5173";
-            const uri = "http://localhost:5173";
+            const domain = "api.cloud.developerdao.com";
+            const uri = "https://api.cloud.developerdao.com";
             
             const messageToSign = createSiweMessage({
                 domain,

@@ -61,7 +61,7 @@
     };
 
     const RECIPIENT_ADDRESS =
-        "0x0b2C639c533813f4Aa9D7837CAf62653d097Ff85" as const;
+        "0x6B6dE853c477022dB427d53c102c58761FDc25DA" as const;
 
     const chains = {
         Optimism: {
@@ -92,13 +92,13 @@
             safeConfirmations: 256, // ~8 minutes
             timeEstimate: "8 minutes",
         },
-        Sepolia: {
-            address: "0x53f3A63f4e5239AeFa97390F6334aE41E20a6fb5" as const,
-            decimals: 18,
-            chain: sepolia,
-            safeConfirmations: 30, // ~3 minutes
-            timeEstimate: "6 minutes",
-        },
+        // Sepolia: {
+        //     address: "0x53f3A63f4e5239AeFa97390F6334aE41E20a6fb5" as const,
+        //     decimals: 18,
+        //     chain: sepolia,
+        //     safeConfirmations: 30, // ~3 minutes
+        //     timeEstimate: "6 minutes",
+        // },
     };
 
     const durations = [1, 3, 6, 12];
@@ -294,7 +294,7 @@
             console.log("Proceeding with backend call...");
 
             // Now try to communicate with backend
-            const applyRes = await fetch("http://localhost:3000/api/pay/eth", {
+            const applyRes = await fetch("https://api.cloud.developerdao.com/api/pay/eth", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -310,7 +310,7 @@
             }
 
             // Update plan with duration
-            const planRes = await fetch("http://localhost:3000/api/pay/apply", {
+            const planRes = await fetch("https://api.cloud.developerdao.com/api/pay/apply", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
@@ -345,7 +345,7 @@
         loading = true;
         try {
             const res = await fetch(
-                "http://localhost:3000/api/payments?page=0&per_page=20",
+                "https://api.cloud.developerdao.com/api/payments?page=0&per_page=20",
                 {
                     method: "GET",
                     credentials: "include",
@@ -371,7 +371,7 @@
 
             // Get nonce from backend
             const nonceRes = await fetch(
-                `http://localhost:3000/api/siwe/nonce/jwt`,
+                `https://api.cloud.developerdao.com/api/siwe/nonce/jwt`,
                 {
                     method: "GET",
                     credentials: "include",
@@ -413,7 +413,7 @@
 
             // Verify with backend
             const verifyRes = await fetch(
-                "http://localhost:3000/api/siwe/add_wallet",
+                "https://api.cloud.developerdao.com/api/siwe/add_wallet",
                 {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -450,7 +450,7 @@
 
         manualSubmitting = true;
         try {
-            const applyRes = await fetch("http://localhost:3000/api/pay/eth", {
+            const applyRes = await fetch("https://api.cloud.developerdao.com/api/pay/eth", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 credentials: "include",
