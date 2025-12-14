@@ -62,7 +62,7 @@
 				password: userInfo.password
 			};
 			
-			console.log('Sending registration data:', userData);
+			console.log('Sending registration data:', userData.email);
 			
 			const response = await fetch(`${API_BASE_URL}/register`, {
 				method: 'POST',
