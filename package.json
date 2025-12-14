@@ -30,6 +30,7 @@
 		"vite": "^6.0.0"
 	},
 	"dependencies": {
+		"@sveltejs/adapter-vercel": "^6.2.0",
 		"axios": "^1.7.9",
 		"viem": "^2.23.14"
 	}
