@@ -98,8 +98,8 @@ export const authService = {
             
             console.log('Got nonce:', nonce);
             
-            const domain = "cloud.developerdao.com";
-            const uri = "https://cloud.developerdao.com";
+            const domain = "api.cloud.developerdao.com";
+            const uri = "https://api.cloud.developerdao.com";
             
             const messageToSign = createSiweMessage({
                 domain,
