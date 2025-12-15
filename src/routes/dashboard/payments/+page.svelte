@@ -55,9 +55,9 @@
     // } as const;
 
     const plans = {
-        tier1: { name: "Tier 1", price: 40, requests: "5M" },
-        tier2: { name: "Tier 2", price: 200, requests: "30M" },
-        tier3: { name: "Tier 3", price: 850, requests: "150M" },
+        tier1: { name: "Basic", price: 40, requests: "5M" },
+        tier2: { name: "Premier", price: 200, requests: "30M" },
+        tier3: { name: "Ultra", price: 850, requests: "150M" },
     };
 
     const RECIPIENT_ADDRESS =

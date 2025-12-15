@@ -73,7 +73,7 @@
       <!-- Gigachad Plan -->
       <Card class="flex-1 p-6 flex-col justify-between">
         <div class="w-full h-full">
-          <h3 class="text-xl mb-2 font-heading">Gigachad</h3>
+          <h3 class="text-xl mb-2 font-heading">Ultra</h3>
           <div class="mb-6">
             <span class="text-3xl font-bold">$850</span>
             <span class="text-neutral-600">/month</span>
