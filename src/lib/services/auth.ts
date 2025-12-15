@@ -98,7 +98,7 @@ export const authService = {
             
             console.log('Got nonce:', nonce);
             
-            const domain = "ddrpc-git-v2-developdao.vercel.app";
+            const domain = "cloud.developerdao.com";
             const uri = "https://api.cloud.developerdao.com";
             
             const messageToSign = createSiweMessage({

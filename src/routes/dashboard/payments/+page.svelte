@@ -61,7 +61,7 @@
     };
 
     const RECIPIENT_ADDRESS =
-        "0x6B6dE853c477022dB427d53c102c58761FDc25DA" as const;
+        "0x65C67Befc1AE667E538a588295070E5d5f478B2C" as const;
 
     const chains = {
         Optimism: {
@@ -301,27 +301,13 @@
                 body: JSON.stringify({
                     hash: hash,
                     chain: selectedChain,
+                    plan: selectedPlan
                 }),
             });
 
             if (!applyRes.ok) {
                 const errorText = await applyRes.text();
                 throw new Error(errorText);
-            }
-
-            // Update plan with duration
-            const planRes = await fetch("https://api.cloud.developerdao.com/api/pay/apply", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify({
-                    plan: selectedPlan,
-                    duration: selectedDuration,
-                }),
-            });
-
-            if (!planRes.ok) {
-                throw new Error(await planRes.text());
             }
 
             toasts.success("Payment processed successfully!");
@@ -457,6 +443,7 @@
                 body: JSON.stringify({
                     hash: manualTxHash,
                     chain: manualChain,
+                    plan: selectedPlan
                 }),
             });
 
