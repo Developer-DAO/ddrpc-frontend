@@ -41,7 +41,7 @@
             alt=""
           />
         </div>
-        <h1 class="font-heading text-6xl">
+        <h1 class="font-heading text-4xl md:text-6xl">
           HIGH PERFORMANCE CLOUD INFRASTRUCTURE
         </h1>
       </div>
