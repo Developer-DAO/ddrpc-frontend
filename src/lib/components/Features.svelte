@@ -27,13 +27,13 @@
           </div>
         </div>
       </div>
-      <div class="w-full md:w-1/2 relative h-[300px]">
-        <img
-          src="/rpc-diagram.svg"
-          alt="RPC Network Diagram"
-          class="w-full h-full object-contain"
-        />
-      </div>
+      <!-- <div class="w-full md:w-1/2 relative h-[300px]"> -->
+      <!--   <img -->
+      <!--     src="/rpc-diagram.svg" -->
+      <!--     alt="RPC Network Diagram" -->
+      <!--     class="w-full h-full object-contain" -->
+      <!--   /> -->
+      <!-- </div> -->
     </Card>
   </div>
 </section> 
