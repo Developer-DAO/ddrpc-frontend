@@ -60,7 +60,7 @@
           </Button>
         </a>
 
-        <a href="https://developer-dao.github.io/Cloud-Docs/intro.html">
+        <a href="https://docs.cloud.developerdao.com/">
           <Button variant="secondary">
             Documentation
           </Button>

@@ -36,7 +36,7 @@
       <!--   Features -->
       <!-- </a> -->
       
-      <a class="text-xs md:text-sm tracking-wide text-neutral-500 p-0 hover:text-primary-white transition-colors" href="https://developer-dao.github.io/Cloud-Docs/intro.html">Docs</a>
+      <a class="text-xs md:text-sm tracking-wide text-neutral-500 p-0 hover:text-primary-white transition-colors" href="https://docs.cloud.developerdao.com/">Docs</a>
       {#if $user.isAuthenticated}
         <a class="text-xs md:text-sm tracking-wide text-neutral-500 p-0 hover:text-primary-white transition-colors" href="/dashboard">
           Dashboard
