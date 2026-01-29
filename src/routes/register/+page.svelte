@@ -5,6 +5,8 @@
 	// import axiosDefault from 'axios';
 	import { onMount } from 'svelte';
 	import { toasts } from '$lib/stores/toast';
+    import { authService } from '$lib/services/auth';
+    import { goto } from '$app/navigation';
 	
 	// Configure axios with proper CORS settings
 	// const axios: AxiosInstance = axiosDefault.create({
@@ -34,6 +36,9 @@
 
 	onMount(() => {
 		mounted = true;
+        if (authService.isAuthenticated()) {
+            goto("/dashboard");
+        }
 	});
 
 	let { registerFormValues, activationFormValues, showRegisterForm, showActivationForm } = $state({
